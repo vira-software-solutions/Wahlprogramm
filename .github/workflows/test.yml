@@ -13,7 +13,7 @@ jobs:
       with:
         arguments: test
       id: gradle
-    - uses: example/action-that-comments-on-the-pr@v0
+    - uses: peter-evans/commit-comment@v1.1.0
       if: failure()
       with:
         comment: Build failed ${{ steps.gradle.outputs.build-scan-url }}

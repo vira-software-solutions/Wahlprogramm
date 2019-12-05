@@ -1,11 +1,11 @@
 # .github/workflows/test-gradle-rc.yml
 name: Test latest commit on push
-on: push
+on: [push, pull_request]
 jobs:
   gradle:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@master
     - uses: MrRamych/gradle-actions/openjdk-13@3.1
       with:
         args: test

@@ -9,5 +9,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - uses: actions/checkout@v1
+      - name: "gradle check"
+        run: gradle check
       - name: "gradle test"
         run: gradle test

@@ -12,11 +12,6 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-    - uses: eskatos/gradle-command-action@v1
+    - uses: MrRamych/gradle-actions/openjdk-13@3.1
       with:
-        arguments: test
-      id: gradle
-    - uses: peter-evans/commit-comment@v1.1.0
-      if: failure()
-      with:
-        comment: Build failed ${{ steps.gradle.outputs.build-scan-url }}
+        args: test

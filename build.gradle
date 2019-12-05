@@ -57,6 +57,11 @@ javafx {
     ]
 }
 
+wrapper{
+    gradleVersion = '6.0'
+    distributionUrl = distributionUrl.replace("bin", "all")
+}
+
 test {
     include '/tests/**/*'
     useJUnitPlatform()

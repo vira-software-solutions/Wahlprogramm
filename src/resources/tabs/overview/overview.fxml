@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  ~ Copyright (c) 2019. Johanna Rührig aka Vira aka TheRealVira
+  ~ All rights reserved.
+  -->
+
+<VBox stylesheets="/tabs/overview/overview.css"
+      fx:id="overviewBox"
+      spacing="10.0"
+      xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tabs.overview.Overview"
+      minWidth="-Infinity"
+      styleClass="background">
+   <padding>
+      <Insets bottom="5.0" left="10" right="10"/>
+   </padding>
+   <HBox alignment="CENTER_LEFT" spacing="25.0">
+      <VBox.margin>
+         <Insets/>
+      </VBox.margin>
+      <Label styleClass="header" text="Begrüßung"/>
+      <Button mnemonicParsing="false" text="Wahlordnung als PDF" defaultButton="true"/>
+      <Button mnemonicParsing="false" text="Wahlordnung als PDF" defaultButton="true"/>
+   </HBox>
+   <TextArea wrapText="true" editable="false" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae nisi nibh. Mauris et dui aliquam, posuere risus mollis, tincidunt felis. Duis ac interdum odio. Pellentesque tempus tincidunt metus, eu rhoncus risus eleifend eu. Aliquam erat volutpat. Phasellus sit amet eros id augue suscipit cursus. Maecenas justo sapien, interdum vel erat id, dictum gravida eros. Integer mollis massa mollis tempor gravida. Proin viverra mollis leo. Sed vehicula consectetur semper. Nunc eros neque, tincidunt vel rutrum ac, placerat et elit. Donec facilisis nunc vel quam laoreet, sed tristique magna luctus. Sed rhoncus venenatis nisl, quis pulvinar justo tempus quis. Mauris accumsan maximus eleifend. Mauris scelerisque rhoncus arcu, vel ullamcorper dolor pellentesque id."/>
+   <TitledPane animated="false" text="Was wählen wir? Rechtliche Grundlagen:">
+      <TextArea wrapText="true" editable="false" text="Curabitur ut vehicula lorem, id malesuada enim. Vestibulum a mauris ut purus interdum pulvinar quis ac lorem. Aliquam euismod id risus ut mollis. Suspendisse rhoncus, odio ac tincidunt aliquet, sapien lorem aliquet orci, eu blandit odio dui sit amet risus. Nam ac venenatis turpis. Suspendisse vel sagittis elit. Donec tristique commodo mi, vel maximus dui. Maecenas ut finibus quam."/>
+   </TitledPane>
+
+   <TitledPane animated="false" text="Wie wählen wir? Aufbau der Anwendung:">
+      <TextArea wrapText="true" editable="false" text="Mauris ac orci interdum, maximus turpis sit amet, viverra risus. Ut id nisl vitae ex elementum auctor. Cras turpis lacus, consequat nec venenatis vitae, varius ut nisi. Sed tristique sed est et maximus. Proin commodo neque eget sem posuere consequat. Vivamus a tempus orci, vel rhoncus ante. Morbi velit metus, malesuada eu tincidunt quis, luctus id ipsum. Etiam scelerisque turpis vitae gravida tincidunt."/>
+   </TitledPane>
+</VBox>

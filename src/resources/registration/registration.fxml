@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="registration.Registration"
+      fx:id="root">
+    <padding>
+        <Insets bottom="5.0" left="10" right="10"/>
+    </padding>
+    <Label styleClass="header" text="Willkommen"/>
+    <TextArea wrapText="true" editable="false" text="Um hier fortfahren zu können, muss vorerst ein Administrator erstellt werden. Bitte dafür die folgenden Felder auszufüllen:"/>
+
+    <TextField fx:id="username" promptText="Name"/>
+    <PasswordField fx:id="password" promptText="Passwort"/>
+    <PasswordField fx:id="password2" promptText="Passwort wiederholen"/>
+
+    <Button text="Bestätigen"/>
+</VBox>

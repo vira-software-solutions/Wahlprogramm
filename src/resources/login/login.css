@@ -1,0 +1,15 @@
+/*
+ * Copyright (c) 2019. Johanna Rührig aka Vira aka TheRealVira
+ * All rights reserved.
+ */
+
+.text-field.error {
+    -jfx-text-box-border: red ;
+    -jfx-focus-color: red ;
+}
+
+.jfx-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: cornflowerblue;
+    -fx-text-fill: white;
+}

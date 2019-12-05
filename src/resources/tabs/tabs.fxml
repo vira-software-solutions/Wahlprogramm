@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+<!--
+  ~ Copyright (c) 2019. Johanna Rührig aka Vira aka TheRealVira
+  ~ All rights reserved.
+  -->
+
+<TabPane xmlns:fx="http://javafx.com/fxml/1"
+         stylesheets="/tabs/tabs.css"
+         xmlns="http://javafx.com/javafx/11.0.1"
+         fx:id="tabs"
+         fx:controller="tabs.Tabs"
+         tabClosingPolicy="UNAVAILABLE">
+
+    <Tab text="Übersicht">
+        <ScrollPane>
+            <fx:include source="/tabs/overview/overview.fxml"/>
+        </ScrollPane>
+    </Tab>
+    <Tab text="Wahlvorbereitung">
+        <ScrollPane>
+            <fx:include source="/tabs/electionPreparation/electionPreparation.fxml"/>
+        </ScrollPane>
+    </Tab>
+    <Tab text="Abstimmung">
+        <ScrollPane>
+            <fx:include source="/tabs/election/election.fxml"/>
+        </ScrollPane>
+    </Tab>
+    <Tab text="Ergebnisse">
+        <ScrollPane>
+            <fx:include source="/tabs/results/results.fxml"/>
+        </ScrollPane>
+    </Tab>
+    <Tab fx:id="logout" text="Abmeldung" onSelectionChanged="#onTabSelectionChanged"/>
+</TabPane>

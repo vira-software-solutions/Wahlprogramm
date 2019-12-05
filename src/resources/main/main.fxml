@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<!--
+  ~ Copyright (c) 2019. Johanna Rührig aka Vira aka TheRealVira
+  ~ All rights reserved.
+  -->
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.MainController"
+      fx:id="root"
+      alignment="CENTER"
+      AnchorPane.topAnchor="0"
+      AnchorPane.bottomAnchor="0"
+      AnchorPane.leftAnchor="0"
+      AnchorPane.rightAnchor="0"
+      stylesheets="/main/main.css"
+      styleClass="background"/>

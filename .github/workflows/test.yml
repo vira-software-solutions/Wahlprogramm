@@ -9,7 +9,5 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: "gradle install"
-        run: gradle install
       - name: "gradle test"
         run: gradle test

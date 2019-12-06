@@ -1,5 +1,3 @@
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
 CREATE TABLE user
 (
 	username text not null
@@ -7,7 +5,6 @@ CREATE TABLE user
 			primary key,
 	password text not null
 );
-INSERT INTO user VALUES('admin','07c2126323b5d3c76d24618f86cb132704acabd107ce7cc0813f30d1a1be1a0923be86035342b7066d72d07e4b4766cd8e1d697414c2e45ea911c13aab2e668c0d41f97dd7b5051c5b6d0d4ec2c48979b4ec90f291e5958f14756a55693e0fc6da3acee9');
 CREATE TABLE IF NOT EXISTS "sektion"
 (
 	num int not null
@@ -89,11 +86,12 @@ CREATE TABLE gender
 INSERT INTO gender VALUES('Männlich');
 INSERT INTO gender VALUES('Weiblich');
 INSERT INTO gender VALUES('Sonstige');
-DELETE FROM sqlite_sequence;
+
 CREATE UNIQUE INDEX user_username_uindex
 	on user (username);
 CREATE UNIQUE INDEX role_name_uindex
 	on role (name);
 CREATE UNIQUE INDEX gender_name_uindex
 	on gender (name);
+
 COMMIT;

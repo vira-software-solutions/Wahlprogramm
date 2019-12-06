@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
-<VBox xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="registration.Registration"
-      fx:id="root">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="root" alignment="CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="registration.Registration">
     <padding>
-        <Insets bottom="5.0" left="10" right="10"/>
+        <Insets bottom="5.0" left="10" right="10" />
     </padding>
-    <Label styleClass="header" text="Willkommen"/>
-    <TextArea wrapText="true" editable="false" text="Um hier fortfahren zu können, muss vorerst ein Administrator erstellt werden. Bitte dafür die folgenden Felder auszufüllen:"/>
+    <Label styleClass="header" text="Willkommen" />
+    <TextArea editable="false" text="Um hier fortfahren zu können, muss vorerst ein Administrator erstellt werden. Bitte dafür die folgenden Felder auszufüllen:" wrapText="true" />
+   <HBox alignment="CENTER_RIGHT" spacing="15.0">
+      <Label text="Benutzername:" />
 
-    <TextField fx:id="username" promptText="Name"/>
-    <PasswordField fx:id="password" promptText="Passwort"/>
-    <PasswordField fx:id="password2" promptText="Passwort wiederholen"/>
-
-    <Button text="Bestätigen"/>
+      <TextField fx:id="username" alignment="CENTER" prefColumnCount="20" promptText="Name" />
+   </HBox>
+   <HBox alignment="CENTER_RIGHT" spacing="15.0">
+      <Label text="Passwort:" />
+      <PasswordField fx:id="password2" alignment="CENTER" prefColumnCount="20" promptText="Passwort" />
+   </HBox>
+    <HBox alignment="CENTER_RIGHT" spacing="15.0">
+        <Label text="Passwort wiederholen:" />
+        <PasswordField fx:id="password21" alignment="CENTER" prefColumnCount="20" promptText="Passwort" />
+    </HBox>
+   <HBox alignment="CENTER_RIGHT" spacing="15.0">
+          <Button defaultButton="true" onAction="#onAcceptBtnClicked" text="Bestätigen" />
+         <Button alignment="CENTER" onAction="#OnCanceled" text="Abbrechen" />
+   </HBox>
 </VBox>

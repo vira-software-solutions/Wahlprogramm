@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +23,10 @@ public class MainController extends VBox implements Initializable {
 
     public static VBox getMainPane(){
         return mainPane;
+    }
+
+    public static Stage getMainStage(){
+        return (Stage) mainPane.getScene().getWindow();
     }
 
     public static void setContent(Node node) {

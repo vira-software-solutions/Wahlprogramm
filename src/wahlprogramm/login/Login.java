@@ -39,8 +39,8 @@ public class Login {
         new Thread(() -> {
             try {
                 if (DatabaseManager.ConfirmUser(new
-                        User(username.getText(), password.
-                        getText()))) {
+                        User(username.getText(),
+                        password.getText()))) {
                     Platform.runLater(() -> MainController.setContent(
                             MainController.loadFXML(
                                     Tabs.class.getResource("/tabs/tabs.fxml")

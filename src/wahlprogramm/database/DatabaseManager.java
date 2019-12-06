@@ -7,10 +7,8 @@ package database;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.MainController;
 import main.PropsManager;
 import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.configuration.Configuration;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import registration.Registration;
 import tabs.electionPreparation.CandidatesDataModel;
@@ -21,19 +19,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DatabaseManager {
-    private static final String DATABASE_LOCATION = "/wahlprogramm.sql";
+    private static final String DATABASE_LOCATION = "src/resources/wahlprogramm.database";
 
     public static boolean databaseExists(){
         return new File(DATABASE_LOCATION).exists();
     }
 
-    public static void initializeDatabase(User admin){
-        final String url = "jdbc:sqlite:" + DATABASE_LOCATION;
-
+    public static void initializeDatabase(User admin) throws SQLException {
         var dbConfig = new FluentConfiguration();
-        dbConfig.locations(Registration.class.getResource(DATABASE_LOCATION).toString());
+        dbConfig.dataSource("jdbc:sqlite:"+DATABASE_LOCATION, "", "");
+        dbConfig.locations("classpath:main/database/");
+        dbConfig.mixed(true);
         Flyway flyway = new Flyway(dbConfig);
-        flyway.migrate();
+        try {
+            flyway.migrate();
+        }
+        catch (Exception ignored){
+
+        }
+
+        InsertUser(admin);
     }
 
     private static Connection Connect() {

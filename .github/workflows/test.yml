@@ -13,7 +13,5 @@ jobs:
         with:
           java-version: 11
       - uses: actions/checkout@v1
-      - name: "gradle check"
-        run: gradle check
       - name: "gradle test"
         run: gradle test

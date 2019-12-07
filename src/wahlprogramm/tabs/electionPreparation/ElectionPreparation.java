@@ -125,7 +125,7 @@ public class ElectionPreparation extends VBox {
         }
 
         tableData.setItems(FXCollections.observableArrayList(
-                DatabaseManager.GetCandidatesForRole(
+                DatabaseManager.getCandidatesForRole(
                         sektionComboBox.getSelectionModel().getSelectedItem(),
                         funktionComboBox.getSelectionModel().getSelectedItem()
                 )));
@@ -133,14 +133,14 @@ public class ElectionPreparation extends VBox {
 
     private void UpdateData() throws SQLException {
         for (CandidatesDataModel candidatesDataModel : tableData.getItems()) {
-            if (DatabaseManager.DoesCandidateAlreadyExist(candidatesDataModel)) {
+            if (DatabaseManager.doesCandidateAlreadyExist(candidatesDataModel)) {
                 continue;
             }
 
-            DatabaseManager.InsertNewCandidate(candidatesDataModel);
+            DatabaseManager.insertNewCandidate(candidatesDataModel);
         }
 
-        DatabaseManager.InsertCandidateForRoleForSektion(
+        DatabaseManager.insertCandidateForRoleForSektion(
                 tableData.getItems(),
                 funktionComboBox.getSelectionModel().getSelectedItem(),
                 sektionComboBox.getSelectionModel().getSelectedItem());
@@ -163,11 +163,11 @@ public class ElectionPreparation extends VBox {
 
     @FXML
     private void onUpdate() throws SQLException {
-        DatabaseManager.DumpCandidatesForRoleOfSektion(
+        DatabaseManager.dumpCandidatesForRoleOfSektion(
                 sektionComboBox.getSelectionModel().getSelectedItem(),
                 funktionComboBox.getSelectionModel().getSelectedItem());
         UpdateData();
-        DatabaseManager.DumpUnusedCandidates();
+        DatabaseManager.dumpUnusedCandidates();
     }
 
     @FXML

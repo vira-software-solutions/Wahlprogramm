@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import main.PropsManager;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
-import registration.Registration;
 import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.File;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DatabaseManager {
-    private static final String DATABASE_LOCATION = "src/resources/wahlprogramm.database";
+    public static final String DATABASE_LOCATION = "src/resources/wahlprogramm.database";
 
     public static boolean databaseExists(){
         return new File(DATABASE_LOCATION).exists();
@@ -38,7 +37,7 @@ public final class DatabaseManager {
 
         }
 
-        InsertUser(admin);
+        insertUser(admin);
     }
 
     private static Connection Connect() {
@@ -68,7 +67,7 @@ public final class DatabaseManager {
         }
     }
 
-    public static final void InsertUser(User user) throws SQLException {
+    public static final void insertUser(User user) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return;
@@ -82,7 +81,7 @@ public final class DatabaseManager {
         CloseConnection(conn);
     }
 
-    public static final void InsertCandidateForRoleForSektion(ObservableList<CandidatesDataModel> candidatesDataModels, String role, Integer sektion) throws SQLException {
+    public static final void insertCandidateForRoleForSektion(ObservableList<CandidatesDataModel> candidatesDataModels, String role, Integer sektion) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return;
@@ -91,6 +90,10 @@ public final class DatabaseManager {
         conn.setAutoCommit(false);
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO role_sektion_candidate (sektion_num, role_name, candidate_name) VALUES(?,?,?)");
         for (CandidatesDataModel candidatesDataModel : candidatesDataModels) {
+            if(!doesCandidateAlreadyExist(candidatesDataModel)){
+                insertNewCandidate(candidatesDataModel);
+            }
+
             stmt.setInt(1, sektion);
             stmt.setString(2, role);
             stmt.setString(3, candidatesDataModel.getName());
@@ -101,7 +104,7 @@ public final class DatabaseManager {
         CloseConnection(conn);
     }
 
-    public static final void InsertNewCandidate(CandidatesDataModel candidatesDataModel) throws SQLException {
+    public static final void insertNewCandidate(CandidatesDataModel candidatesDataModel) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return;
@@ -117,7 +120,7 @@ public final class DatabaseManager {
         CloseConnection(conn);
     }
 
-    public static boolean ConfirmUser(User user) throws SQLException {
+    public static boolean confirmUser(User user) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return false;
@@ -134,7 +137,7 @@ public final class DatabaseManager {
         return toRet == 1;
     }
 
-    public static final boolean DoesCandidateAlreadyExist(CandidatesDataModel candidatesDataModel) throws SQLException {
+    public static final boolean doesCandidateAlreadyExist(CandidatesDataModel candidatesDataModel) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return false;
@@ -190,7 +193,7 @@ public final class DatabaseManager {
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final ObservableList<CandidatesDataModel> GetCandidatesForRole(Integer sektion, String role) throws SQLException {
+    public static final ObservableList<CandidatesDataModel> getCandidatesForRole(Integer sektion, String role) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return null;
@@ -243,7 +246,7 @@ public final class DatabaseManager {
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final void DumpCandidatesForRoleOfSektion(Integer sektion, String role) throws SQLException {
+    public static final void dumpCandidatesForRoleOfSektion(Integer sektion, String role) throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return;
@@ -259,7 +262,7 @@ public final class DatabaseManager {
         CloseConnection(conn);
     }
 
-    public static void DumpUnusedCandidates() throws SQLException {
+    public static void dumpUnusedCandidates() throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return;

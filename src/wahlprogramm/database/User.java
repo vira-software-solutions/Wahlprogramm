@@ -30,7 +30,7 @@ public class User {
     }
 
     private static String hashToString(byte[] hash) {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
 
         for (byte b : hash) {
             buff.append(String.format("%02x", b & 0xFF));

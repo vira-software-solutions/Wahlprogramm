@@ -38,7 +38,7 @@ public class Login {
 
         new Thread(() -> {
             try {
-                if (DatabaseManager.ConfirmUser(new
+                if (DatabaseManager.confirmUser(new
                         User(username.getText(),
                         password.getText()))) {
                     Platform.runLater(() -> MainController.setContent(

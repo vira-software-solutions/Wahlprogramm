@@ -20,24 +20,26 @@ version '1.0-SNAPSHOT'
 mainClassName="Main"
 
 sourceSets{
-    all {
-        java {
-            srcDirs+=["src/wahlprogramm"]
-        }
+    all{
         resources {
             srcDirs += ["src/resources"]
         }
-        test{
-            java {
-                srcDirs+=["src/tests"]
-            }
+    }
+    main {
+        java {
+            srcDirs+=["src/wahlprogramm"]
+        }
+    }
+    test{
+        java {
+            srcDirs+=["src/tests"]
         }
     }
 }
 
 dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
     implementation(
             'org.xerial:sqlite-jdbc:3.28.0',
             'org.bouncycastle:bcprov-jdk15on:1.64',
@@ -63,6 +65,5 @@ wrapper{
 }
 
 test {
-    include '/tests/**/*'
     useJUnitPlatform()
 }

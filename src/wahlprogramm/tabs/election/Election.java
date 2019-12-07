@@ -74,7 +74,7 @@ public class Election extends VBox {
 
         for (String role : Roles) {
             ArrayList<RankedCandidateDataModel> rankedCandidateDataModels = new ArrayList<>();
-            for (CandidatesDataModel candidatesDataModel : DatabaseManager.GetCandidatesForRole(sektionComboBox.getSelectionModel().getSelectedItem(), role)) {
+            for (CandidatesDataModel candidatesDataModel : DatabaseManager.getCandidatesForRole(sektionComboBox.getSelectionModel().getSelectedItem(), role)) {
                 rankedCandidateDataModels.add(
                         new RankedCandidateDataModel(candidatesDataModel.getName(),
                                 candidatesDataModel.getGender()));

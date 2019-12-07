@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
+import main.MainController;
 import tabs.election.rankingWindow.RankedCandidateDataModel;
 import tabs.election.rankingWindow.RankingWindow;
 import tabs.electionPreparation.CandidatesDataModel;
@@ -87,7 +88,7 @@ public class Election extends VBox {
             RankingWindow controller = new RankingWindow();
             controller.initData(role, FXCollections.observableArrayList(rankedCandidateDataModels));
             toObserve.add(controller);
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/tabs/election/rankingWindow/rankingWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/tabs/election/rankingWindow/rankingWindow.fxml"));
             loader.setController(controller);
 
             electionFields.getChildren().add(loader.load());

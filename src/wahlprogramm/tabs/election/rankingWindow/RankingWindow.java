@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import main.MainController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,7 +54,7 @@ public class RankingWindow extends VBox implements Initializable {
 
     private void loadData() {
         for (RankingEntry rankedCandidateDataModel : rankingEntries) {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/tabs/election/rankingWindow/rankingEntry.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/tabs/election/rankingWindow/rankingEntry.fxml"));
             loader.setController(rankedCandidateDataModel);
 
             try {

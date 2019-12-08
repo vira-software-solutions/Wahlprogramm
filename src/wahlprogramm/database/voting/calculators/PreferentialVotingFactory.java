@@ -1,10 +1,10 @@
 package database.voting.calculators;
 
-public final class PreferencialVotingFactory {
+public final class PreferentialVotingFactory {
     public static final String INSTANT_RUNOFF_VOTE="INSTANT_RUNOFF_VOTE";
-    public static final String SINGLE_TRANSFERABLE_VOTE="SINGLE_TRANSFERABLE_VOTE";
+    public static final String SINGLE_TRANSFERABLE_VOTE="PreferentialVotingFactory";
 
-    public static final PreferencialVoting getPreferencialVoting(String selection){
+    public static final PreferentialVoting getPreferencialVoting(String selection){
         switch (selection){
             case INSTANT_RUNOFF_VOTE:
                 return new InstantRunoffVote();

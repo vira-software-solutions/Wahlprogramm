@@ -5,8 +5,6 @@
 
 package tabs.results;
 
-import database.DatabaseManager;
-import database.voting.VotingHelper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +16,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import main.CollectionOfCollections;
+import tabs.election.SektionDataModel;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +26,7 @@ import java.sql.SQLException;
 public class Results extends VBox {
 
     @FXML
-    private ComboBox<Integer> sektionComboBox;
+    private ComboBox<SektionDataModel> sektionComboBox;
 
     @FXML
     private Button exportButton;
@@ -48,16 +48,18 @@ public class Results extends VBox {
 
     @FXML
     public void initialize() {
-        try {
-            this.sektionComboBox.setItems(DatabaseManager.GetSektionen());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.sektionComboBox.setItems(CollectionOfCollections.getSektionDataModels());
 
         this.sektionComboBox
                 .getSelectionModel()
                 .selectedItemProperty()
-                .addListener((ov, t, t1) -> onSektionComboBoxChanged());
+                .addListener((ov, t, t1) -> {
+                    try {
+                        onSektionComboBoxChanged();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
 
         InitCols();
     }
@@ -69,14 +71,21 @@ public class Results extends VBox {
         this.percentage.setCellValueFactory(new PropertyValueFactory<>("percentage"));
     }
 
-    private void onSektionComboBoxChanged() {
+    private void onSektionComboBoxChanged() throws SQLException {
         if (sektionComboBox.getSelectionModel().getSelectedItem() != null) {
             exportButton.setDisable(false);
         } else {
             exportButton.setDisable(true);
         }
 
-        resultsTable.setItems(FXCollections.observableArrayList(VotingHelper.calculateResults()));
+        resultsTable.setItems(FXCollections
+                .observableArrayList(sektionComboBox
+                        .getSelectionModel()
+                        .getSelectedItem()
+                        .getVotingHelper()
+                        .calculateResults()
+                )
+        );
     }
 
     @FXML

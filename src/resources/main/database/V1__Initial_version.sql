@@ -68,7 +68,6 @@ INSERT INTO role VALUES('Migrationsreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Medienreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Gewerkschaftsreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Wirtschaftsreferat', 'INSTANT_RUNOFF_VOTE');
-
 INSERT INTO role VALUES('Bezirkskonferenz', 'SINGLE_TRANSFERABLE_VOTE');
 INSERT INTO role VALUES('Bezirksrat', 'SINGLE_TRANSFERABLE_VOTE');
 
@@ -128,5 +127,3 @@ CREATE UNIQUE INDEX role_name_uindex
 	on role (name);
 CREATE UNIQUE INDEX gender_name_uindex
 	on gender (name);
-
-COMMIT;

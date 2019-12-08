@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import main.PropsManager;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
+import tabs.election.SektionDataModel;
 import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.File;
@@ -155,7 +156,7 @@ public final class DatabaseManager {
         return toRet;
     }
 
-    public static final ObservableList<String> GetRoles() throws SQLException {
+    public static final ObservableList<String> getRoles() throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return null;
@@ -174,7 +175,7 @@ public final class DatabaseManager {
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final ObservableList<Integer> GetSektionen() throws SQLException {
+    public static final ObservableList<SektionDataModel> getSektionen() throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return null;
@@ -183,9 +184,9 @@ public final class DatabaseManager {
         PreparedStatement stmt = conn.prepareStatement("SELECT num AS num FROM sektion;");
         ResultSet rs = stmt.executeQuery();
 
-        List<Integer> toRet = new ArrayList<>();
+        List<SektionDataModel> toRet = new ArrayList<>();
         while (rs.next()) {
-            toRet.add(rs.getInt("num"));
+            toRet.add(new SektionDataModel(rs.getInt("num")));
         }
 
         CloseConnection(conn);
@@ -227,7 +228,7 @@ public final class DatabaseManager {
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final ObservableList<String> GetGender() throws SQLException {
+    public static final ObservableList<String> getGender() throws SQLException {
         Connection conn = OpenConnection();
         if (conn == null) {
             return null;
@@ -290,6 +291,23 @@ public final class DatabaseManager {
         while (rs.next()) {
             toRet.add(rs.getString("gender"));
         }
+
+        CloseConnection(conn);
+
+        return toRet;
+    }
+
+    public static String getVotingOptionFromRole(String role) throws SQLException{
+        Connection conn = OpenConnection();
+        if (conn == null) {
+            return null;
+        }
+
+        PreparedStatement stmt = conn.prepareStatement("SELECT role.voting_option_type AS type FROM role WHERE role.name=?;");
+        stmt.setString(1, role);
+        ResultSet rs = stmt.executeQuery();
+
+        String toRet = rs.getString("type");
 
         CloseConnection(conn);
 

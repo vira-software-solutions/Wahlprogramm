@@ -1,16 +1,20 @@
 package database;
 
+import database.voting.calculators.PreferentialVotingFactory;
 import helper.Helper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import main.PropsManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tabs.election.SektionDataModel;
 import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,26 +107,30 @@ class DatabaseManagerTest {
 
     @Test
     void getRoles() throws SQLException {
-        final String[] roles = DatabaseManager.GetRoles().toArray(String[]::new);
-        assertArrayEquals(roles, new String[]{
+        final ObservableList<String> roles = DatabaseManager.getRoles();
+        for (String s : Set.of(
                 "Vorsitz",
                 "Finanzreferat",
                 "Schriftführung",
                 "Katasterführung",
-                "Fraunreferat",
+                "Frauenreferat",
                 "Bildungsreferat",
                 "Umweltreferat",
                 "Jugendreferat",
                 "Migrationsreferat",
                 "Medienreferat",
                 "Gewerkschaftsreferat",
-                "Wirtschaftsreferat"});
+                "Wirtschaftsreferat",
+                "Bezirkskonferenz",
+                "Bezirksrat")) {
+            assertTrue(roles.contains(s));
+        }
     }
 
     @Test
     void getSektionen() throws SQLException {
-        final Integer[] roles = DatabaseManager.GetSektionen().toArray(Integer[]::new);
-        assertArrayEquals(roles, new Integer[]{
+        final ObservableList<SektionDataModel> sektionen = DatabaseManager.getSektionen();
+        for(int i : Set.of(
                 1,
                 2,
                 3,
@@ -147,7 +155,9 @@ class DatabaseManagerTest {
                 31,
                 32,
                 33,
-                34});
+                34)){
+            assertTrue(sektionen.stream().anyMatch(s->s.getNum()==i));
+        }
     }
 
     @Test
@@ -169,7 +179,7 @@ class DatabaseManagerTest {
 
     @Test
     void getGender() throws SQLException {
-        final String[] roles = DatabaseManager.GetGender().toArray(String[]::new);
+        final String[] roles = DatabaseManager.getGender().toArray(String[]::new);
         assertArrayEquals(roles, new String[]{
                 "Männlich",
                 "Weiblich",
@@ -205,5 +215,11 @@ class DatabaseManagerTest {
     void getBlacklistedGendersForRole() throws SQLException{
         assertEquals(DatabaseManager.getBlacklistedGendersForRole("Finanzreferat").size(), 0);
         assertEquals(DatabaseManager.getBlacklistedGendersForRole("Frauenreferat").get(0), "Männlich");
+    }
+
+    @Test
+    void getVotingOptionFromRole() throws SQLException {
+        assertEquals(DatabaseManager.getVotingOptionFromRole("Umweltreferat"), PreferentialVotingFactory.INSTANT_RUNOFF_VOTE);
+        assertEquals(DatabaseManager.getVotingOptionFromRole("Bezirkskonferenz"), PreferentialVotingFactory.SINGLE_TRANSFERABLE_VOTE);
     }
 }

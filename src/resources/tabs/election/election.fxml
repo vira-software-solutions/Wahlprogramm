@@ -18,7 +18,7 @@
    </padding>
    <HBox alignment="CENTER" spacing="25.0">
       <Label text="Wahlzettel Nr.:" />
-      <Label fx:id="counter" text="Label" />
+      <Label fx:id="counter" text="1" />
       <ComboBox fx:id="sektionComboBox" promptText="Sektion" />
       <Button fx:id="processButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#onEnterBallot" text="Wahlzettel eingeben" />
       <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#onReset" text="Bisherige Ergebnisse Löschen" />

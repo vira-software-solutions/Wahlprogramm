@@ -6,28 +6,40 @@
 package database.voting;
 
 
-import main.PropsManager;
+import database.DatabaseManager;
+import database.voting.calculators.PreferentialVotingFactory;
+import javafx.beans.property.SimpleIntegerProperty;
 import tabs.election.rankingWindow.RankingEntry;
 import tabs.results.ResultsDataModel;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class VotingHelper {
-    private static final HashMap<String, ArrayList<RankingEntry>> RESULTS = new HashMap<>();
-
-    public static void reset() {
-        RESULTS.clear();
+public class VotingHelper {
+    public VotingHelper(){
+        BallotCount = new SimpleIntegerProperty(1);
     }
 
-    public static void addResults(String role, ArrayList<RankingEntry> rankingEntries) {
+    private final HashMap<String, ArrayList<RankingEntry>> RESULTS = new HashMap<>();
+    private final SimpleIntegerProperty BallotCount;
+
+    public SimpleIntegerProperty getBallotCountProperty(){return BallotCount;}
+
+    public void reset() {
+        RESULTS.clear();
+        BallotCount.setValue(1);
+    }
+
+    public void addResults(String role, ArrayList<RankingEntry> rankingEntries) {
+        BallotCount.setValue(BallotCount.add(1).getValue());
         for (RankingEntry rankingEntry : rankingEntries) {
             addResult(role, rankingEntry);
         }
     }
 
-    public static void addResult(String role, RankingEntry rankingEntry) {
+    private void addResult(String role, RankingEntry rankingEntry) {
         if (rankingEntry == null) {
             return;
         }
@@ -35,38 +47,23 @@ public final class VotingHelper {
         createOrAddData(role, rankingEntry);
     }
 
-    private static void createOrAddData(String role, RankingEntry rankingEntry) {
+    private void createOrAddData(String role, RankingEntry rankingEntry) {
         if (!RESULTS.containsKey(role)) {
             RESULTS.put(role, new ArrayList<>());
-            RESULTS.get(role).add(rankingEntry);
-        } else {
-            RankingEntry currentRankingEntry = RESULTS.get(role)
-                    .stream()
-                    .filter(candidate -> candidate.DataModel.getName().equals(rankingEntry.DataModel.getName()) &&
-                            candidate.DataModel.getGender().equals(rankingEntry.DataModel.getGender()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (currentRankingEntry != null) {
-                currentRankingEntry.setRank(rankingEntry.getRank() + currentRankingEntry.getRank());
-            }
         }
+
+        RESULTS.get(role).add(rankingEntry);
     }
 
-    public static ArrayList<ResultsDataModel> calculateResults() {
+    public ArrayList<ResultsDataModel> calculateResults() throws SQLException {
         ArrayList<ResultsDataModel> winningCandidates = new ArrayList<>();
+
         for (Map.Entry<String, ArrayList<RankingEntry>> set : RESULTS.entrySet()) {
-            winningCandidates.add(calculateResult(set));
+            winningCandidates.addAll(
+                    PreferentialVotingFactory.getPreferencialVoting(
+                            DatabaseManager.getVotingOptionFromRole(set.getKey())).calculate(BallotCount.getValue(), set));
         }
 
         return winningCandidates;
-    }
-
-    private static ResultsDataModel calculateResult(Map.Entry<String, ArrayList<RankingEntry>> set) {
-        final String male = (String) PropsManager.Props.get("voting.male");
-        return new ResultsDataModel(set.getKey(),
-                set.getValue().get(0).DataModel.getName(),
-                set.getValue().get(0).DataModel.getGender(),
-                set.getValue().get(0).getRank());
     }
 }

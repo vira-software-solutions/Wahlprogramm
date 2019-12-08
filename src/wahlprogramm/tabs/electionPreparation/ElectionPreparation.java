@@ -14,6 +14,8 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
+import main.CollectionOfCollections;
+import tabs.election.SektionDataModel;
 
 import java.sql.SQLException;
 
@@ -31,7 +33,7 @@ public class ElectionPreparation extends VBox {
     private TableColumn<CandidatesDataModel, String> gender;
 
     @FXML
-    private ComboBox<Integer> sektionComboBox;
+    private ComboBox<SektionDataModel> sektionComboBox;
 
     @FXML
     private ComboBox<String> funktionComboBox;
@@ -47,12 +49,8 @@ public class ElectionPreparation extends VBox {
 
     @FXML
     private void initialize(){
-        try {
-            funktionComboBox.setItems(DatabaseManager.GetRoles());
-            sektionComboBox.setItems(DatabaseManager.GetSektionen());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        funktionComboBox.setItems(CollectionOfCollections.getRoles());
+        sektionComboBox.setItems(CollectionOfCollections.getSektionDataModels());
 
         initTable();
 
@@ -119,14 +117,14 @@ public class ElectionPreparation extends VBox {
 
         tableData.setItems(FXCollections.observableArrayList(
                 DatabaseManager.getCandidatesForRole(
-                        sektionComboBox.getSelectionModel().getSelectedItem(),
+                        sektionComboBox.getSelectionModel().getSelectedItem().getNum(),
                         funktionComboBox.getSelectionModel().getSelectedItem()
                 )));
 
 
         try {
             gender.setCellValueFactory(cellData -> cellData.getValue().genderProperty());
-            var allGenders = DatabaseManager.GetGender();
+            var allGenders = CollectionOfCollections.getGender();
             var blacklist = DatabaseManager.getBlacklistedGendersForRole(
                     this.funktionComboBox.getSelectionModel().getSelectedItem()
             );
@@ -150,7 +148,7 @@ public class ElectionPreparation extends VBox {
         DatabaseManager.insertCandidateForRoleForSektion(
                 tableData.getItems(),
                 funktionComboBox.getSelectionModel().getSelectedItem(),
-                sektionComboBox.getSelectionModel().getSelectedItem());
+                sektionComboBox.getSelectionModel().getSelectedItem().getNum());
     }
 
     @FXML
@@ -171,7 +169,7 @@ public class ElectionPreparation extends VBox {
     @FXML
     private void onUpdate() throws SQLException {
         DatabaseManager.dumpCandidatesForRoleOfSektion(
-                sektionComboBox.getSelectionModel().getSelectedItem(),
+                sektionComboBox.getSelectionModel().getSelectedItem().getNum(),
                 funktionComboBox.getSelectionModel().getSelectedItem());
         updateData();
         DatabaseManager.dumpUnusedCandidates();

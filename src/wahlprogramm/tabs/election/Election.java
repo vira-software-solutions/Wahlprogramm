@@ -6,8 +6,6 @@
 package tabs.election;
 
 import database.DatabaseManager;
-import database.voting.VotingHelper;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import main.CollectionOfCollections;
 import main.MainController;
 import tabs.election.rankingWindow.RankingWindow;
 import tabs.electionPreparation.CandidatesDataModel;
@@ -29,7 +28,7 @@ public class Election extends VBox {
     private VBox electionFields;
 
     @FXML
-    private ComboBox<Integer> sektionComboBox;
+    private ComboBox<SektionDataModel> sektionComboBox;
 
     @FXML
     private Button processButton;
@@ -40,19 +39,11 @@ public class Election extends VBox {
     @FXML
     private Label counter;
 
-    private ObservableList<String> Roles;
     private ObservableList<RankingWindow> RankingWindows;
-
-    private SimpleIntegerProperty BallotCounter;
 
     @FXML
     private void initialize(){
-        try {
-            sektionComboBox.setItems(DatabaseManager.GetSektionen());
-            Roles = DatabaseManager.GetRoles();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        sektionComboBox.setItems(CollectionOfCollections.getSektionDataModels());
 
         this.sektionComboBox.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> {
             try {
@@ -61,9 +52,6 @@ public class Election extends VBox {
                 e.printStackTrace();
             }
         });
-
-        BallotCounter = new SimpleIntegerProperty(1);
-        counter.textProperty().bind(BallotCounter.asString());
     }
 
     private void onSektionSelectionChange() throws SQLException, IOException {
@@ -74,6 +62,7 @@ public class Election extends VBox {
         }
 
         resetRankingController();
+        counter.textProperty().bind(sektionComboBox.getSelectionModel().getSelectedItem().getVotingHelper().getBallotCountProperty().asString());
     }
 
     private void resetRankingController() throws SQLException, IOException {
@@ -81,9 +70,9 @@ public class Election extends VBox {
 
         ArrayList<RankingWindow> toObserve = new ArrayList<>();
 
-        for (String role : Roles) {
+        for (String role : CollectionOfCollections.getRoles()) {
             ArrayList<CandidatesDataModel> rankedCandidateDataModels = new ArrayList<>();
-            for (CandidatesDataModel candidatesDataModel : DatabaseManager.getCandidatesForRole(sektionComboBox.getSelectionModel().getSelectedItem(), role)) {
+            for (CandidatesDataModel candidatesDataModel : DatabaseManager.getCandidatesForRole(sektionComboBox.getSelectionModel().getSelectedItem().getNum(), role)) {
                 rankedCandidateDataModels.add(
                         new CandidatesDataModel(candidatesDataModel.getName(),
                                 candidatesDataModel.getGender()));
@@ -107,24 +96,21 @@ public class Election extends VBox {
 
     @FXML
     private void onEnterBallot() throws IOException, SQLException {
-        for (String role : Roles) {
+        for (String role : CollectionOfCollections.getRoles()) {
             RankingWindow current = RankingWindows.stream().filter(rankingWindow -> rankingWindow.root.getText().equals(role)).findFirst().orElse(null);
             if (current == null) {
                 continue;
             }
 
-            VotingHelper.addResults(role, current.getRankedCandidates());
+            sektionComboBox.getSelectionModel().getSelectedItem().getVotingHelper().addResults(role, current.getRankedCandidates());
         }
         resetRankingController();
-
-        BallotCounter.setValue(BallotCounter.add(1).getValue());
         this.resetButton.setDisable(false);
     }
 
     @FXML
     private void onReset() {
-        VotingHelper.reset();
+        sektionComboBox.getItems().stream().forEach(s->s.getVotingHelper().reset());
         this.resetButton.setDisable(true);
-        BallotCounter.set(1);
     }
 }

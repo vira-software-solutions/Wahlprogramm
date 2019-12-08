@@ -47,16 +47,4 @@ class VotingHelperTest {
         VHelper.addResults("Vorsitz", testData);
         assertTrue(VHelper.calculateResults().size() > 0);
     }
-
-    @Test
-    void addResult() throws SQLException {
-        assertEquals(0, VHelper.calculateResults().size());
-        VHelper.addResult("Vorsitz", new RankingEntry().initData(new CandidatesDataModel(Helper.randStringGen(12), "Weiblich"), 23));
-        assertTrue(VHelper.calculateResults().size() > 0);
-    }
-
-    @Test
-    void calculateResults() {
-        // TODO engineer logic first.
-    }
 }

@@ -5,50 +5,53 @@
 
 package tabs.election.rankingWindow;
 
-import com.sun.tools.javac.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import main.MainController;
+import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class RankingWindow extends VBox implements Initializable {
     private ObservableList<RankingEntry> rankingEntries;
 
     @FXML
-    public Label headingText;
+    public TitledPane root;
 
     @FXML
-    private VBox candidateVBox;
+    public ListView<RankingEntry> candidateListView;
 
     private String Haeding;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        headingText.setText(Haeding);
+        root.setText(Haeding);
         loadData();
 
-        candidateVBox.setOnMouseDragReleased(mouseDragEvent -> {
-            int indexOfDraggingNode = candidateVBox.getChildren().indexOf(mouseDragEvent.getGestureSource());
-            rotateNodes(candidateVBox, indexOfDraggingNode, candidateVBox.getChildren().size() - 1);
+        candidateListView.setItems(rankingEntries);
+        candidateListView.setOnMouseDragReleased(mouseDragEvent -> {
+            int indexOfDraggingNode = candidateListView.getItems().indexOf(mouseDragEvent.getGestureSource());
+            rotateNodes(candidateListView, indexOfDraggingNode, candidateListView.getItems().size() - 1);
         });
     }
 
-    private void rotateNodes(final VBox root, final int indexOfDraggingNode,
+    private void rotateNodes(final ListView root, final int indexOfDraggingNode,
                              final int indexOfDropTarget) {
         if (indexOfDraggingNode >= 0 && indexOfDropTarget >= 0) {
-            final Node node = root.getChildren().remove(indexOfDraggingNode);
-            root.getChildren().add(indexOfDropTarget, node);
+            final Node node = (Node)root.getItems().remove(indexOfDraggingNode);
+            root.getItems().add(indexOfDropTarget, node);
         }
     }
 
@@ -56,19 +59,21 @@ public class RankingWindow extends VBox implements Initializable {
         for (RankingEntry rankedCandidateDataModel : rankingEntries) {
             FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/tabs/election/rankingWindow/rankingEntry.fxml"));
             loader.setController(rankedCandidateDataModel);
+            loader.setRoot(rankedCandidateDataModel);
 
             try {
-                addWithDragging(candidateVBox, loader.load());
+                addWithDragging(candidateListView, loader.load());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        UpdateRankings();
     }
 
-    private void addWithDragging(final VBox root, final Node node) {
+    private void addWithDragging(final ListView<RankingEntry> root, final RankingEntry node) {
         node.setOnDragDetected(mouseEvent -> {
             node.startFullDrag();
-            addPreview(root, node);
         });
 
         node.setOnMouseDragEntered(mouseDragEvent -> node.setStyle("-fx-background-color: accent_color"));
@@ -77,50 +82,37 @@ public class RankingWindow extends VBox implements Initializable {
 
         node.setOnMouseDragReleased(mouseDragEvent -> {
             node.setStyle("");
-            int indexOfDraggingNode = root.getChildren().indexOf(mouseDragEvent.getGestureSource());
-            int indexOfDropTarget = root.getChildren().indexOf(node);
+            int indexOfDraggingNode = root.getItems().indexOf(mouseDragEvent.getGestureSource());
+            int indexOfDropTarget = root.getItems().indexOf(node);
             rotateNodes(root, indexOfDraggingNode, indexOfDropTarget);
 
-            removePreview(root);
+            UpdateRankings();
 
             mouseDragEvent.consume();
         });
 
-        root.getChildren().add(node);
+        root.getItems().add(node);
     }
 
-    private void addPreview(final VBox root, final Node node) {
-        ImageView imageView = new ImageView(node.snapshot(null, null));
-        imageView.setManaged(false);
-        imageView.setMouseTransparent(true);
-        root.getChildren().add(imageView);
-        root.setUserData(imageView);
-        root.setOnMouseDragged(event -> imageView.relocate(event.getX(), event.getY()));
-        root.setOnMouseDragReleased(event -> removePreview(root));
+    private void UpdateRankings(){
+        for (Node rankingEntry : rankingEntries){
+            if(rankingEntry instanceof RankingEntry){
+                ((RankingEntry)rankingEntry).setRank(rankingEntries.indexOf(rankingEntry)+1);
+            }
+        }
     }
 
-    private void removePreview(final VBox root) {
-        root.setOnMouseDragged(null);
-        root.getChildren().remove(root.getUserData());
-        root.setUserData(null);
-    }
-
-    public void initData(String heading, ObservableList<RankedCandidateDataModel> rankedCandidates) {
+    public void initData(String heading, ObservableList<CandidatesDataModel> candidatesDataModels) {
         Haeding = heading;
 
-        ArrayList<RankingEntry> toObserve = new ArrayList<>();
-        for (RankedCandidateDataModel rankedCandidateDataModel : rankedCandidates) {
-            toObserve.add(new RankingEntry().initData(rankedCandidateDataModel));
+        rankingEntries = FXCollections.observableList(new ArrayList<>());
+
+        for (CandidatesDataModel candidatesDataModel : candidatesDataModels) {
+            rankingEntries.add(new RankingEntry().initData(candidatesDataModel, -1));
         }
-        rankingEntries = FXCollections.observableList(toObserve);
     }
 
-    public ArrayList<RankedCandidateDataModel> getRankedCandidates() {
-        ArrayList<RankedCandidateDataModel> toRet = new ArrayList<>();
-        for (RankingEntry rankingEntry : rankingEntries) {
-            toRet.add(rankingEntry.getRAnkedCandidateDataModel());
-        }
-
-        return toRet;
+    public ArrayList<RankingEntry> getRankedCandidates() {
+        return new ArrayList<>(rankingEntries);
     }
 }

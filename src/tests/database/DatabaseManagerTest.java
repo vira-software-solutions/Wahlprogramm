@@ -200,4 +200,10 @@ class DatabaseManagerTest {
         DatabaseManager.dumpUnusedCandidates();
         assertFalse(DatabaseManager.doesCandidateAlreadyExist(testCandidatesDataModel));
     }
+
+    @Test
+    void getBlacklistedGendersForRole() throws SQLException{
+        assertEquals(DatabaseManager.getBlacklistedGendersForRole("Finanzreferat").size(), 0);
+        assertEquals(DatabaseManager.getBlacklistedGendersForRole("Frauenreferat").get(0), "Männlich");
+    }
 }

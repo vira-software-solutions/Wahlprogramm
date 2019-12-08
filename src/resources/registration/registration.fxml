@@ -18,7 +18,7 @@
    <HBox alignment="CENTER_RIGHT" spacing="15.0">
       <Label text="Benutzername:" />
 
-      <TextField fx:id="username" alignment="CENTER" prefColumnCount="20" promptText="Name" />
+      <TextField fx:id="username"  alignment="CENTER" prefColumnCount="20" promptText="Name" />
    </HBox>
    <HBox alignment="CENTER_RIGHT" spacing="15.0">
       <Label text="Passwort:" />

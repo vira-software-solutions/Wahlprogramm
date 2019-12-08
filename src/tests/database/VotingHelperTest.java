@@ -1,12 +1,13 @@
 package database;
 
+import database.voting.VotingHelper;
 import helper.Helper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tabs.election.rankingWindow.RankedCandidateDataModel;
+import tabs.election.rankingWindow.RankingEntry;
+import tabs.electionPreparation.CandidatesDataModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,10 +25,10 @@ class VotingHelperTest {
 
     @Test
     void reset() {
-        final ArrayList<RankedCandidateDataModel> testData = new ArrayList<>();
-        testData.add(new RankedCandidateDataModel("name", "gender"));
+        final ArrayList<RankingEntry> testData = new ArrayList<>();
+        testData.add(new RankingEntry());
         VotingHelper.addResults("Vorsitz", testData);
-        assertTrue(VotingHelper.calculateResults().size()>0);
+        assertTrue(VotingHelper.calculateResults().size() > 0);
         VotingHelper.reset();
         assertEquals(0, VotingHelper.calculateResults().size());
     }
@@ -35,19 +36,19 @@ class VotingHelperTest {
     @Test
     void addResults() {
         assertEquals(0, VotingHelper.calculateResults().size());
-        final ArrayList<RankedCandidateDataModel> testData = new ArrayList<>();
-        for (int i=0;i<10;i++) {
-            testData.add(new RankedCandidateDataModel(Helper.randStringGen(12), "Weiblich"));
+        final ArrayList<RankingEntry> testData = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            testData.add(new RankingEntry().initData(new CandidatesDataModel(Helper.randStringGen(12), "Weiblich"), 0));
         }
         VotingHelper.addResults("Vorsitz", testData);
-        assertTrue(VotingHelper.calculateResults().size()>0);
+        assertTrue(VotingHelper.calculateResults().size() > 0);
     }
 
     @Test
     void addResult() {
         assertEquals(0, VotingHelper.calculateResults().size());
-        VotingHelper.addResult("Vorsitz", new RankedCandidateDataModel(Helper.randStringGen(12), "Weiblich"));
-        assertTrue(VotingHelper.calculateResults().size()>0);
+        VotingHelper.addResult("Vorsitz", new RankingEntry().initData(new CandidatesDataModel(Helper.randStringGen(12), "Weiblich"), 23));
+        assertTrue(VotingHelper.calculateResults().size() > 0);
     }
 
     @Test

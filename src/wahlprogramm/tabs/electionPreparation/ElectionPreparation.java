@@ -54,7 +54,7 @@ public class ElectionPreparation extends VBox {
             e.printStackTrace();
         }
 
-        InitTable();
+        initTable();
 
         this.funktionComboBox.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> {
             try {
@@ -73,30 +73,23 @@ public class ElectionPreparation extends VBox {
         });
     }
 
-    private void InitTable() {
-        InitCols();
+    private void initTable() {
+        initCols();
     }
 
-    private void InitCols() {
+    private void initCols() {
         name.setCellValueFactory(new PropertyValueFactory<>("Name"));
         gender.setCellValueFactory(new PropertyValueFactory<>("Gender"));
         delete.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
 
-        EditableCols();
+        editableCols();
     }
 
-    private void EditableCols() {
+    private void editableCols() {
         name.setCellFactory(TextFieldTableCell.forTableColumn());
         name.setOnEditCommit(e -> e.getTableView().getItems().get(e.getTablePosition().getRow()).setName(e.getNewValue()));
-
-        try {
-            gender.setCellValueFactory(cellData -> cellData.getValue().genderProperty());
-            gender.setCellFactory(ComboBoxTableCell.forTableColumn(DatabaseManager.GetGender()));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
         delete.setCellFactory(param -> new TableCell<>() {
             private final Button deleteButton = new Button("Entfernen");
@@ -129,9 +122,23 @@ public class ElectionPreparation extends VBox {
                         sektionComboBox.getSelectionModel().getSelectedItem(),
                         funktionComboBox.getSelectionModel().getSelectedItem()
                 )));
+
+
+        try {
+            gender.setCellValueFactory(cellData -> cellData.getValue().genderProperty());
+            var allGenders = DatabaseManager.GetGender();
+            var blacklist = DatabaseManager.getBlacklistedGendersForRole(
+                    this.funktionComboBox.getSelectionModel().getSelectedItem()
+            );
+            allGenders.removeAll(blacklist);
+
+            gender.setCellFactory(ComboBoxTableCell.forTableColumn(allGenders));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    private void UpdateData() throws SQLException {
+    private void updateData() throws SQLException {
         for (CandidatesDataModel candidatesDataModel : tableData.getItems()) {
             if (DatabaseManager.doesCandidateAlreadyExist(candidatesDataModel)) {
                 continue;
@@ -166,7 +173,7 @@ public class ElectionPreparation extends VBox {
         DatabaseManager.dumpCandidatesForRoleOfSektion(
                 sektionComboBox.getSelectionModel().getSelectedItem(),
                 funktionComboBox.getSelectionModel().getSelectedItem());
-        UpdateData();
+        updateData();
         DatabaseManager.dumpUnusedCandidates();
     }
 

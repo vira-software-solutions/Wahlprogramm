@@ -6,7 +6,7 @@
 package tabs.results;
 
 import database.DatabaseManager;
-import database.VotingHelper;
+import database.voting.VotingHelper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

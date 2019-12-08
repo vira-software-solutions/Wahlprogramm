@@ -5,18 +5,18 @@
 
 package tabs.election;
 
-import com.sun.tools.javac.Main;
 import database.DatabaseManager;
-import database.VotingHelper;
+import database.voting.VotingHelper;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import main.MainController;
-import tabs.election.rankingWindow.RankedCandidateDataModel;
 import tabs.election.rankingWindow.RankingWindow;
 import tabs.electionPreparation.CandidatesDataModel;
 
@@ -37,8 +37,13 @@ public class Election extends VBox {
     @FXML
     private Button resetButton;
 
+    @FXML
+    private Label counter;
+
     private ObservableList<String> Roles;
     private ObservableList<RankingWindow> RankingWindows;
+
+    private SimpleIntegerProperty BallotCounter;
 
     @FXML
     private void initialize(){
@@ -56,6 +61,9 @@ public class Election extends VBox {
                 e.printStackTrace();
             }
         });
+
+        BallotCounter = new SimpleIntegerProperty(1);
+        counter.textProperty().bind(BallotCounter.asString());
     }
 
     private void onSektionSelectionChange() throws SQLException, IOException {
@@ -74,10 +82,10 @@ public class Election extends VBox {
         ArrayList<RankingWindow> toObserve = new ArrayList<>();
 
         for (String role : Roles) {
-            ArrayList<RankedCandidateDataModel> rankedCandidateDataModels = new ArrayList<>();
+            ArrayList<CandidatesDataModel> rankedCandidateDataModels = new ArrayList<>();
             for (CandidatesDataModel candidatesDataModel : DatabaseManager.getCandidatesForRole(sektionComboBox.getSelectionModel().getSelectedItem(), role)) {
                 rankedCandidateDataModels.add(
-                        new RankedCandidateDataModel(candidatesDataModel.getName(),
+                        new CandidatesDataModel(candidatesDataModel.getName(),
                                 candidatesDataModel.getGender()));
             }
 
@@ -100,7 +108,7 @@ public class Election extends VBox {
     @FXML
     private void onEnterBallot() throws IOException, SQLException {
         for (String role : Roles) {
-            RankingWindow current = RankingWindows.stream().filter(rankingWindow -> rankingWindow.headingText.getText().equals(role)).findFirst().orElse(null);
+            RankingWindow current = RankingWindows.stream().filter(rankingWindow -> rankingWindow.root.getText().equals(role)).findFirst().orElse(null);
             if (current == null) {
                 continue;
             }
@@ -109,6 +117,7 @@ public class Election extends VBox {
         }
         resetRankingController();
 
+        BallotCounter.setValue(BallotCounter.add(1).getValue());
         this.resetButton.setDisable(false);
     }
 
@@ -116,5 +125,6 @@ public class Election extends VBox {
     private void onReset() {
         VotingHelper.reset();
         this.resetButton.setDisable(true);
+        BallotCounter.set(1);
     }
 }

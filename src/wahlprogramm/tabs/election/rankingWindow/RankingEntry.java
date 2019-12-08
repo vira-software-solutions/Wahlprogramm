@@ -5,10 +5,14 @@
 
 package tabs.election.rankingWindow;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import tabs.electionPreparation.CandidatesDataModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,21 +25,23 @@ public class RankingEntry extends HBox implements Initializable {
     @FXML
     private Label rank;
 
-    private RankedCandidateDataModel DataModel;
+    private SimpleIntegerProperty entryRank;
 
-    RankingEntry initData(RankedCandidateDataModel dataModel) {
+    public CandidatesDataModel DataModel;
+
+    public RankingEntry initData(CandidatesDataModel dataModel, int rank) {
+        entryRank = new SimpleIntegerProperty(rank);
         DataModel = dataModel;
         return this;
     }
 
-    RankedCandidateDataModel getRAnkedCandidateDataModel() {
-        return this.DataModel;
-    }
+    public int getRank(){return entryRank.getValue();}
+    public void setRank(int rank){entryRank.setValue(rank);}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         name.setText(DataModel.getName());
         gender.setText(DataModel.getGender());
-        rank.setText("" + DataModel.Rank.getValue());
+        rank.textProperty().bind(entryRank.asString());
     }
 }

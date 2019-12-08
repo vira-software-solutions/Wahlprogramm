@@ -275,4 +275,24 @@ public final class DatabaseManager {
 
         CloseConnection(conn);
     }
+
+    public static List<String> getBlacklistedGendersForRole(String role) throws SQLException {
+        Connection conn = OpenConnection();
+        if (conn == null) {
+            return null;
+        }
+
+        PreparedStatement stmt = conn.prepareStatement("SELECT role_gender_blacklist.gender AS gender FROM role_gender_blacklist WHERE role_gender_blacklist.role=?;");
+        stmt.setString(1, role);
+        ResultSet rs = stmt.executeQuery();
+
+        List<String> toRet = new ArrayList<>();
+        while (rs.next()) {
+            toRet.add(rs.getString("gender"));
+        }
+
+        CloseConnection(conn);
+
+        return toRet;
+    }
 }

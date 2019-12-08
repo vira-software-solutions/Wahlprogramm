@@ -2,12 +2,14 @@ package database;
 
 import database.voting.VotingHelper;
 import helper.Helper;
+import main.PropsManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tabs.election.rankingWindow.RankingEntry;
 import tabs.electionPreparation.CandidatesDataModel;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,7 +20,8 @@ class VotingHelperTest {
     private static VotingHelper VHelper;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
+        PropsManager.init();
         VHelper = new VotingHelper();
     }
 
@@ -32,19 +35,19 @@ class VotingHelperTest {
         final ArrayList<RankingEntry> testData = new ArrayList<>();
         testData.add(new RankingEntry());
         VHelper.addResults("Vorsitz", testData);
-        assertTrue(VHelper.calculateResults().size() > 0);
+        assertTrue(VHelper.getBallotCountProperty().getValue() > 1);
         VHelper.reset();
-        assertEquals(0, VHelper.calculateResults().size());
+        assertEquals(1, (int) VHelper.getBallotCountProperty().getValue());
     }
 
     @Test
-    void addResults() throws SQLException {
-        assertEquals(0, VHelper.calculateResults().size());
+    void addResults() {
+        assertEquals(1, (int) VHelper.getBallotCountProperty().getValue());
         final ArrayList<RankingEntry> testData = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             testData.add(new RankingEntry().initData(new CandidatesDataModel(Helper.randStringGen(12), "Weiblich"), 0));
         }
         VHelper.addResults("Vorsitz", testData);
-        assertTrue(VHelper.calculateResults().size() > 0);
+        assertTrue(VHelper.getBallotCountProperty().getValue() > 1);
     }
 }

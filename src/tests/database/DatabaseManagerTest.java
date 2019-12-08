@@ -4,6 +4,7 @@ import database.voting.calculators.PreferentialVotingFactory;
 import helper.Helper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.CollectionOfCollections;
 import main.PropsManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +24,11 @@ class DatabaseManagerTest {
     @BeforeEach
     void setUp() throws IOException, SQLException {
         PropsManager.init();
+
         final User user = new User(Helper.randStringGen(15), Helper.randStringGen(20));
         DatabaseManager.initializeDatabase(user);
+
+        CollectionOfCollections.init();
     }
 
     @AfterEach
@@ -107,7 +111,7 @@ class DatabaseManagerTest {
 
     @Test
     void getRoles() throws SQLException {
-        final ObservableList<String> roles = DatabaseManager.getRoles();
+        final ObservableList<String> roles = CollectionOfCollections.getRoles();
         for (String s : Set.of(
                 "Vorsitz",
                 "Finanzreferat",
@@ -128,8 +132,8 @@ class DatabaseManagerTest {
     }
 
     @Test
-    void getSektionen() throws SQLException {
-        final ObservableList<SektionDataModel> sektionen = DatabaseManager.getSektionen();
+    void getSektionen(){
+        final ObservableList<SektionDataModel> sektionen = CollectionOfCollections.getSektionDataModels();
         for(int i : Set.of(
                 1,
                 2,
@@ -178,8 +182,8 @@ class DatabaseManagerTest {
     }
 
     @Test
-    void getGender() throws SQLException {
-        final String[] roles = DatabaseManager.getGender().toArray(String[]::new);
+    void getGender() {
+        final String[] roles = CollectionOfCollections.getGender().toArray(String[]::new);
         assertArrayEquals(roles, new String[]{
                 "Männlich",
                 "Weiblich",

@@ -45,7 +45,7 @@ public final class DatabaseManager {
         Connection conn;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection(PropsManager.Props.getProperty("database"));
+            conn = DriverManager.getConnection("jdbc:sqlite:"+DATABASE_LOCATION);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             conn = null;

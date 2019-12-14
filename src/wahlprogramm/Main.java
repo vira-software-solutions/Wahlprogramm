@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 import login.Login;
-import main.CollectionOfCollections;
 import main.MainController;
 import main.PropsManager;
 import registration.Registration;
@@ -31,7 +30,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         PropsManager.init();
-        CollectionOfCollections.init();
         // DatabaseManager.InsertUser(new User("admin", "Passw0rd"));
 
         Parent root = FXMLLoader.load(MainController.class.getResource("/main/main.fxml"));

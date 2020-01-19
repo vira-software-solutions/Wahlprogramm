@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class InstantRunoffVote implements PreferentialVoting {
 
     @Override
-    public ArrayList<ResultsDataModel> calculateResults(BallotsOfOneRole ballotsOfOneRole) {
+    public ArrayList<ResultsDataModel> calculateResults(BallotsOfOneRole ballotsOfOneRole, int seats) {
         return null;
     }
 }

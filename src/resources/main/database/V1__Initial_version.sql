@@ -68,6 +68,7 @@ INSERT INTO role VALUES('Migrationsreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Medienreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Gewerkschaftsreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Wirtschaftsreferat', 'INSTANT_RUNOFF_VOTE');
+INSERT INTO role VALUES('Pensionistenreferat', 'INSTANT_RUNOFF_VOTE');
 INSERT INTO role VALUES('Bezirkskonferenz', 'SINGLE_TRANSFERABLE_VOTE');
 INSERT INTO role VALUES('Bezirksrat', 'SINGLE_TRANSFERABLE_VOTE');
 

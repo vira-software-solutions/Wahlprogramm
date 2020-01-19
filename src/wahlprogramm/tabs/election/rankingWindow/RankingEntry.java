@@ -6,13 +6,11 @@
 package tabs.election.rankingWindow;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import tabs.electionPreparation.CandidatesDataModel;
+import database.CandidatesDataModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -22,6 +22,7 @@ import tabs.election.SektionDataModel;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Results extends VBox {
 
@@ -79,13 +80,33 @@ public class Results extends VBox {
         }
 
         resultsTable.setItems(FXCollections
-                .observableArrayList(sektionComboBox
-                        .getSelectionModel()
-                        .getSelectedItem()
-                        .getVotingHelper()
-                        .calculateResults()
+                .observableArrayList(
+                        calculateResults()
                 )
         );
+    }
+
+    private ArrayList<ResultsDataModel> calculateResults() throws SQLException {
+        var results = sektionComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .getVotingHelper()
+                .calculateResults(
+                        sektionComboBox
+                                .getSelectionModel()
+                                .getSelectedItem().getDistrictConferenceSeats()
+                );
+
+        results.addAll(sektionComboBox
+                .getSelectionModel()
+                .getSelectedItem()
+                .getVotingHelper()
+                .calculateResults(
+                        sektionComboBox
+                                .getSelectionModel()
+                                .getSelectedItem().getDistrictParliamentSeats()
+                ));
+        return results;
     }
 
     @FXML

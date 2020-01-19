@@ -1,28 +1,48 @@
 package database.voting;
 
-import tabs.election.rankingWindow.RankingEntry;
+import database.voting.calculators.Ballot;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class BallotsOfOneRole {
-    private final ArrayList<RankingEntry> BallotEntries;
+    public final ArrayList<Ballot> Ballots;
     private final String Role;
 
     public BallotsOfOneRole(String role){
-        BallotEntries = new ArrayList<>();
+        this(role, new ArrayList<>());
+    }
+
+    public BallotsOfOneRole(String role, ArrayList<Ballot> ballots){
+        Ballots = ballots;
         Role = role;
     }
 
-    public void insertEntry(RankingEntry rankingEntry){
-        BallotEntries.add(rankingEntry);
+    public void insertBallot(Ballot ballot){
+        Ballots.add(ballot);
     }
 
-    public void insertEntries(ArrayList<RankingEntry> rankingEntries){
-        BallotEntries.addAll(rankingEntries);
-    }
+    public ArrayList<Ballot> getGenderSpecificBallots(String gender){
+        var maleBallots = new ArrayList<Ballot>();
+        for(var ballot:
+                Ballots){
+            maleBallots.add(
+                    new Ballot(
+                            ballot
+                                    .BallotEntries
+                                    .stream()
+                                    .filter(bE->
+                                            bE
+                                                    .DataModel
+                                                    .getGender()
+                                                    .equals(gender)
+                                    )
+                                    .collect(Collectors.toList())
+                    )
+            );
+        }
 
-    public ArrayList<RankingEntry> getBallotEntries() {
-        return BallotEntries;
+        return maleBallots;
     }
 
     public String getRole() {

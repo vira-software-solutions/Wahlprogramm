@@ -22,6 +22,7 @@
     <HBox alignment="CENTER" spacing="25.0">
         <ComboBox fx:id="sektionComboBox" promptText="Sektion" />
         <ComboBox fx:id="funktionComboBox" promptText="Funktion" />
+      <Button fx:id="defineSeatCountBtn" disable="true" onAction="#onDefineSeatCount" mnemonicParsing="false" text="Sitzanzahl bestimmen" />
         <Button fx:id="newCandidateBtn" defaultButton="true" mnemonicParsing="false" onAction="#onAddNewCandidate" text="Neue Kanditatur hinzufügen" />
         <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#onUpdate" text="Speichern" />
         <Button fx:id="printBtn" mnemonicParsing="false" onAction="#onPrint" text="Wahlzettel drucken" />

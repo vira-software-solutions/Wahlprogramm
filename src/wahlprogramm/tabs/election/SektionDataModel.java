@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class SektionDataModel {
     private SimpleIntegerProperty Num;
     private VotingHelper VHelper;
+    private int DistrictParliamentSeats;
+    private int DistrictConferenceSeats;
 
     public SektionDataModel(int num) {
         Num = new SimpleIntegerProperty(num);
@@ -31,5 +33,21 @@ public class SektionDataModel {
     @Override
     public String toString() {
         return ""+getNum();
+    }
+
+    public int getDistrictConferenceSeats() {
+        return DistrictConferenceSeats;
+    }
+
+    public void setDistrictConferenceSeats(int districtConferenceSeats) {
+        DistrictConferenceSeats = districtConferenceSeats;
+    }
+
+    public int getDistrictParliamentSeats() {
+        return DistrictParliamentSeats;
+    }
+
+    public void setDistrictParliamentSeats(int districtParliamentSeats) {
+        DistrictParliamentSeats = districtParliamentSeats;
     }
 }

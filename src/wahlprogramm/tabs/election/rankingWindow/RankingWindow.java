@@ -13,16 +13,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import main.MainController;
-import tabs.electionPreparation.CandidatesDataModel;
+import database.CandidatesDataModel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 public class RankingWindow extends VBox implements Initializable {
     private ObservableList<RankingEntry> rankingEntries;
@@ -33,11 +31,11 @@ public class RankingWindow extends VBox implements Initializable {
     @FXML
     public ListView<RankingEntry> candidateListView;
 
-    private String Haeding;
+    private String Heading;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        root.setText(Haeding);
+        root.setText(Heading);
         loadData();
 
         candidateListView.setItems(rankingEntries);
@@ -103,7 +101,7 @@ public class RankingWindow extends VBox implements Initializable {
     }
 
     public void initData(String heading, ObservableList<CandidatesDataModel> candidatesDataModels) {
-        Haeding = heading;
+        Heading = heading;
 
         rankingEntries = FXCollections.observableList(new ArrayList<>());
 

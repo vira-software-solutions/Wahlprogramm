@@ -7,11 +7,9 @@ package database;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.PropsManager;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import tabs.election.SektionDataModel;
-import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.File;
 import java.sql.*;

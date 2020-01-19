@@ -6,6 +6,7 @@
 package tabs.election;
 
 import database.DatabaseManager;
+import database.voting.calculators.Ballot;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javafx.scene.layout.VBox;
 import main.CollectionOfCollections;
 import main.MainController;
 import tabs.election.rankingWindow.RankingWindow;
-import tabs.electionPreparation.CandidatesDataModel;
+import database.CandidatesDataModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -102,7 +103,7 @@ public class Election extends VBox {
                 continue;
             }
 
-            sektionComboBox.getSelectionModel().getSelectedItem().getVotingHelper().addResults(role, current.getRankedCandidates());
+            sektionComboBox.getSelectionModel().getSelectedItem().getVotingHelper().addResult(role, new Ballot(current.getRankedCandidates()));
         }
         resetRankingController();
         this.resetButton.setDisable(false);

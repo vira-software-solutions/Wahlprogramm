@@ -5,21 +5,38 @@
 
 package tabs.electionPreparation;
 
+import database.CandidatesDataModel;
 import database.DatabaseManager;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 import main.CollectionOfCollections;
+import main.MainController;
+import main.PropsManager;
+import seatDefinition.SeatDefinition;
+import seatDefinition.WindowListener;
 import tabs.election.SektionDataModel;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ElectionPreparation extends VBox {
+    @FXML
+    public Button defineSeatCountBtn;
+
     @FXML
     private TableView<CandidatesDataModel> tableData;
 
@@ -65,9 +82,15 @@ public class ElectionPreparation extends VBox {
         this.sektionComboBox.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> {
             try {
                 loadData();
+                defineSeatCountBtn.setDisable(false);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        });
+
+        SeatDefinition.addOkListener((districtParliamentSeatCount, districtConferenceSeatCount) -> {
+            sektionComboBox.getSelectionModel().getSelectedItem().setDistrictConferenceSeats(districtConferenceSeatCount);
+            sektionComboBox.getSelectionModel().getSelectedItem().setDistrictParliamentSeats(districtParliamentSeatCount);
         });
     }
 
@@ -178,5 +201,24 @@ public class ElectionPreparation extends VBox {
     @FXML
     private void onPrint(){
         // TODO: PRINT ELECTION
+    }
+
+    @FXML
+    public void onDefineSeatCount(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(MainController.class.getResource("/seatDefinition/seatDefinition.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setTitle("Define Seats");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            new JMetro(scene, Style.valueOf(PropsManager.Props.getProperty("app.style").toUpperCase()));
+            stage.show();
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+        }
     }
 }

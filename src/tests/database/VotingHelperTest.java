@@ -7,7 +7,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tabs.election.rankingWindow.RankingEntry;
-import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.IOException;
 import java.sql.SQLException;

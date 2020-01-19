@@ -7,7 +7,7 @@ package tabs.results;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import tabs.electionPreparation.CandidatesDataModel;
+import database.CandidatesDataModel;
 
 public class ResultsDataModel extends CandidatesDataModel {
     private SimpleStringProperty Role;
@@ -19,12 +19,12 @@ public class ResultsDataModel extends CandidatesDataModel {
         Percentage = new SimpleDoubleProperty(percentage);
     }
 
-    public String getRole() {
-        return Role.get();
+    public ResultsDataModel(String role, CandidatesDataModel candidatesDataModel, double percentage){
+        this(role, candidatesDataModel.getName(), candidatesDataModel.getGender(), percentage);
     }
 
-    public void setRole(String role) {
-        this.Role.set(role);
+    public String getRole() {
+        return Role.get();
     }
 
     public SimpleStringProperty roleProperty() {
@@ -33,10 +33,6 @@ public class ResultsDataModel extends CandidatesDataModel {
 
     public double getPercentage() {
         return Percentage.get();
-    }
-
-    public void setPercentage(double percentage) {
-        this.Percentage.set(percentage);
     }
 
     public SimpleDoubleProperty percentageProperty() {

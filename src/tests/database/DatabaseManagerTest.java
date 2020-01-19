@@ -10,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tabs.election.SektionDataModel;
-import tabs.electionPreparation.CandidatesDataModel;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

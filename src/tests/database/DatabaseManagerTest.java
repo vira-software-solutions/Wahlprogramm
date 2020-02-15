@@ -14,6 +14,7 @@ import tabs.election.SektionDataModel;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,7 @@ class DatabaseManagerTest {
         final User user = new User(Helper.randStringGen(15), Helper.randStringGen(20));
         DatabaseManager.initializeDatabase(user);
 
-        CollectionOfCollections.init();
+        CollectionOfCollections.init(LocalDateTime.now().getNano());
     }
 
     @AfterEach

@@ -19,6 +19,13 @@ public class ResultsDataModel extends CandidatesDataModel {
         Percentage = new SimpleDoubleProperty(percentage);
     }
 
+    public ResultsDataModel(CandidatesDataModel winner, double percentage, String role) {
+        super(winner.getName(), winner.getGender());
+        Role = new SimpleStringProperty(role);
+        Percentage = new SimpleDoubleProperty(percentage);
+
+    }
+
     public ResultsDataModel(String role, CandidatesDataModel candidatesDataModel, double percentage){
         this(role, candidatesDataModel.getName(), candidatesDataModel.getGender(), percentage);
     }

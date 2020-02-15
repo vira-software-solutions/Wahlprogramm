@@ -33,6 +33,10 @@ public class RankingEntry extends HBox implements Initializable {
         return this;
     }
 
+    public CandidatesDataModel getDataModel() {
+        return this.DataModel;
+    }
+
     public int getRank(){return entryRank.getValue();}
     public void setRank(int rank){entryRank.setValue(rank);}
 

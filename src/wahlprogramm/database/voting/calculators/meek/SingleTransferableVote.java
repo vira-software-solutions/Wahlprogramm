@@ -17,7 +17,16 @@ public class SingleTransferableVote implements PreferentialVoting {
 
     @Override
     public ArrayList<ResultsDataModel> calculateResults(BallotsOfOneRole ballotsOfOneRole, int seats) {
-        final int VOTES = ballotsOfOneRole.Ballots.size();
+
+
+
+
+
+        return null;
+
+
+
+        /* final int VOTES = ballotsOfOneRole.Ballots.size();
 
         // Threshold = ( VOTES / SEATS + 1) + 1
         final double WINNING_THRESHOLD = (VOTES / (seats + 1d) + 1) - .1d;
@@ -138,5 +147,6 @@ public class SingleTransferableVote implements PreferentialVoting {
         }
 
         return winner;
+         */
     }
 }

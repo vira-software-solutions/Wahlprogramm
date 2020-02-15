@@ -42,16 +42,17 @@ public class VotingHelper {
     public ArrayList<ResultsDataModel> calculateResults(int districtConferenceSeats, int districtParliamentSeats) throws SQLException {
         ArrayList<ResultsDataModel> winningCandidates = new ArrayList<>();
 
-        for(BallotsOfOneRole ballotsOfOneRole : BALLOTS){
+        for(BallotsOfOneRole ballotsOfOneRole : BALLOTS) {
+            var votingSystemString = DatabaseManager
+                    .getVotingOptionFromRole(ballotsOfOneRole.getRole()
+                    );
             var votingSystem = PreferentialVotingFactory
                     .getPreferencialVoting(
-                            DatabaseManager
-                                    .getVotingOptionFromRole(ballotsOfOneRole.getRole()
-                                    )
+                            votingSystemString
                     );
 
             int seats;
-            switch (ballotsOfOneRole.getRole()){
+            switch (ballotsOfOneRole.getRole()) {
                 case "Bezirkskonferenz":
                     seats = districtConferenceSeats;
                     break;
@@ -63,27 +64,38 @@ public class VotingHelper {
                     break;
             }
 
-            // Add every male winner:
-            winningCandidates
-                    .addAll(
-                            votingSystem
-                                    .calculateResults(
-                                            new BallotsOfOneRole(
-                                                    ballotsOfOneRole.getRole(),
-                                                    ballotsOfOneRole.getBallotsWithOnlyMales()),
-                                            (int)Math.floor(((float)seats)/2d))
-                    );
+            if (votingSystem.equals(PreferentialVotingFactory.INSTANT_RUNOFF_VOTE)) {
+                seats = 2;
+            }
 
-            // Add every female and diverse winner:
-            winningCandidates
-                    .addAll(
-                            votingSystem
-                                    .calculateResults(
-                                            new BallotsOfOneRole(
-                                                    ballotsOfOneRole.getRole(),
-                                                    ballotsOfOneRole.getBallotsWithoutMales()),
-                                            (int)Math.ceil(((float)seats)/2d))
-                    );
+            var maleList = ballotsOfOneRole.getBallotsWithOnlyMales();
+            var otherList = ballotsOfOneRole.getBallotsWithoutMales();
+
+            if (!maleList.isEmpty()) {
+                // Add every male winner:
+                winningCandidates
+                        .addAll(
+                                votingSystem
+                                        .calculateResults(
+                                                new BallotsOfOneRole(
+                                                        ballotsOfOneRole.getRole(),
+                                                        maleList),
+                                                otherList.isEmpty() ? seats : (int) Math.floor(((float) seats) / 2d))
+                        );
+            }
+
+            if (!otherList.isEmpty()) {
+                // Add every female and diverse winner:
+                winningCandidates
+                        .addAll(
+                                votingSystem
+                                        .calculateResults(
+                                                new BallotsOfOneRole(
+                                                        ballotsOfOneRole.getRole(),
+                                                        otherList),
+                                                maleList.isEmpty() ? seats : (int) Math.ceil(((float) seats) / 2d))
+                        );
+            }
         }
 
         return winningCandidates;

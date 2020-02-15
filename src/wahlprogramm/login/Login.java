@@ -20,6 +20,7 @@ import tabs.Tabs;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
@@ -71,7 +72,7 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            CollectionOfCollections.init();
+            CollectionOfCollections.init(LocalDateTime.now().getNano());
         } catch (SQLException e) {
             e.printStackTrace();
         }

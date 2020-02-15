@@ -23,6 +23,8 @@ import database.CandidatesDataModel;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class Election extends VBox {
     @FXML
@@ -72,12 +74,13 @@ public class Election extends VBox {
         ArrayList<RankingWindow> toObserve = new ArrayList<>();
 
         for (String role : CollectionOfCollections.getRoles()) {
-            ArrayList<CandidatesDataModel> rankedCandidateDataModels = new ArrayList<>();
-            for (CandidatesDataModel candidatesDataModel : DatabaseManager.getCandidatesForRole(sektionComboBox.getSelectionModel().getSelectedItem().getNum(), role)) {
-                rankedCandidateDataModels.add(
-                        new CandidatesDataModel(candidatesDataModel.getName(),
-                                candidatesDataModel.getGender()));
-            }
+            HashSet<CandidatesDataModel> rankedCandidateDataModels = new HashSet<>(Objects
+                    .requireNonNull(CollectionOfCollections
+                            .getCandidatesDatamodel(sektionComboBox
+                                    .getSelectionModel()
+                                    .getSelectedItem()
+                                    .getNum(),
+                                    role)));
 
             if (rankedCandidateDataModels.isEmpty()) {
                 continue;

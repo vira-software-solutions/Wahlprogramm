@@ -11,31 +11,10 @@ CREATE TABLE IF NOT EXISTS "sektion"
 		constraint sektion_pk
 			primary key
 );
-INSERT INTO sektion VALUES(1);
 INSERT INTO sektion VALUES(2);
 INSERT INTO sektion VALUES(3);
 INSERT INTO sektion VALUES(4);
 INSERT INTO sektion VALUES(5);
-INSERT INTO sektion VALUES(6);
-INSERT INTO sektion VALUES(7);
-INSERT INTO sektion VALUES(8);
-INSERT INTO sektion VALUES(9);
-INSERT INTO sektion VALUES(10);
-INSERT INTO sektion VALUES(11);
-INSERT INTO sektion VALUES(12);
-INSERT INTO sektion VALUES(13);
-INSERT INTO sektion VALUES(14);
-INSERT INTO sektion VALUES(15);
-INSERT INTO sektion VALUES(16);
-INSERT INTO sektion VALUES(18);
-INSERT INTO sektion VALUES(20);
-INSERT INTO sektion VALUES(22);
-INSERT INTO sektion VALUES(26);
-INSERT INTO sektion VALUES(29);
-INSERT INTO sektion VALUES(31);
-INSERT INTO sektion VALUES(32);
-INSERT INTO sektion VALUES(33);
-INSERT INTO sektion VALUES(34);
 
 create table voting_option
 (

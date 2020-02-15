@@ -10,6 +10,7 @@ import database.DatabaseManager;
 import database.voting.calculators.Ballot;
 import database.voting.calculators.PreferentialVotingFactory;
 import javafx.beans.property.SimpleIntegerProperty;
+import main.CollectionOfCollections;
 import tabs.results.ResultsDataModel;
 
 import java.sql.SQLException;
@@ -80,7 +81,9 @@ public class VotingHelper {
                                                 new BallotsOfOneRole(
                                                         ballotsOfOneRole.getRole(),
                                                         maleList),
-                                                otherList.isEmpty() ? seats : (int) Math.floor(((float) seats) / 2d))
+                                                otherList.isEmpty() ? seats : (int) Math.floor(((float) seats) / 2d),
+                                                CollectionOfCollections.getRandom()
+                                        )
                         );
             }
 
@@ -93,7 +96,9 @@ public class VotingHelper {
                                                 new BallotsOfOneRole(
                                                         ballotsOfOneRole.getRole(),
                                                         otherList),
-                                                maleList.isEmpty() ? seats : (int) Math.ceil(((float) seats) / 2d))
+                                                maleList.isEmpty() ? seats : (int) Math.ceil(((float) seats) / 2d),
+                                                CollectionOfCollections.getRandom()
+                                        )
                         );
             }
         }

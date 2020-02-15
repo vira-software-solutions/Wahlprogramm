@@ -28,7 +28,7 @@
           <TableColumn fx:id="role" text="Funktion" />
           <TableColumn fx:id="name" text="Name" />
           <TableColumn fx:id="gender" text="Geschlecht" />
-          <TableColumn fx:id="percentage" text="Prozent" />
+          <TableColumn fx:id="percentage" text="Punkte von 100" />
       </columns>
         <columnResizePolicy>
           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

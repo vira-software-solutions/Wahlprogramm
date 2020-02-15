@@ -7,6 +7,7 @@ package database;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.CollectionOfCollections;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import tabs.election.SektionDataModel;
@@ -259,6 +260,7 @@ public final class DatabaseManager {
         conn.commit();
 
         CloseConnection(conn);
+        CollectionOfCollections.removeCandidates(sektion, role);
     }
 
     public static void dumpUnusedCandidates() throws SQLException {
@@ -273,6 +275,7 @@ public final class DatabaseManager {
         conn.commit();
 
         CloseConnection(conn);
+        CollectionOfCollections.updateCandidates();
     }
 
     public static List<String> getBlacklistedGendersForRole(String role) throws SQLException {

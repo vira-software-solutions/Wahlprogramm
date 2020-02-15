@@ -28,7 +28,8 @@ public class BallotsOfOneRole {
     public ArrayList<Ballot> getBallotsWithOnlyMales() {
         var genderedBallots = new ArrayList<Ballot>();
 
-        Ballots.forEach(b -> {
+        for(var b:
+                Ballots){
             var filtered = b.BallotEntries
                     .stream()
                     .filter(bE ->
@@ -37,8 +38,13 @@ public class BallotsOfOneRole {
                                     .equals("Männlich")
                     )
                     .collect(Collectors.toList());
+
+            if(filtered.isEmpty()){
+                continue;
+            }
+
             genderedBallots.add(new Ballot(filtered));
-        });
+        }
 
         return genderedBallots;
     }
@@ -49,17 +55,23 @@ public class BallotsOfOneRole {
     public ArrayList<Ballot> getBallotsWithoutMales() {
         var genderedBallots = new ArrayList<Ballot>();
 
-        Ballots.forEach(b -> {
+        for(var b:
+        Ballots){
             var filtered = b.BallotEntries
-                    .stream()
-                    .filter(bE ->
-                            !bE.DataModel
-                                    .getGender()
-                                    .equals("Männlich")
-                    )
-                    .collect(Collectors.toList());
+                .stream()
+                .filter(bE ->
+                        !bE.DataModel
+                                .getGender()
+                                .equals("Männlich")
+                )
+                .collect(Collectors.toList());
+
+            if(filtered.isEmpty()){
+                continue;
+            }
+
             genderedBallots.add(new Ballot(filtered));
-        });
+        }
 
         return genderedBallots;
     }

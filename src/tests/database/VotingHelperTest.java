@@ -1,6 +1,7 @@
 package database;
 
 import database.voting.VotingHelper;
+import database.voting.calculators.Ballot;
 import helper.Helper;
 import main.PropsManager;
 import org.junit.jupiter.api.AfterEach;
@@ -33,7 +34,7 @@ class VotingHelperTest {
     void reset() throws SQLException {
         final ArrayList<RankingEntry> testData = new ArrayList<>();
         testData.add(new RankingEntry());
-        VHelper.addResults("Vorsitz", testData);
+        VHelper.addResult("Vorsitz", new Ballot(testData));
         assertTrue(VHelper.getBallotCountProperty().getValue() > 1);
         VHelper.reset();
         assertEquals(1, (int) VHelper.getBallotCountProperty().getValue());
@@ -46,7 +47,7 @@ class VotingHelperTest {
         for (int i = 0; i < 10; i++) {
             testData.add(new RankingEntry().initData(new CandidatesDataModel(Helper.randStringGen(12), "Weiblich"), 0));
         }
-        VHelper.addResults("Vorsitz", testData);
+        VHelper.addResult("Vorsitz", new Ballot(testData));
         assertTrue(VHelper.getBallotCountProperty().getValue() > 1);
     }
 }

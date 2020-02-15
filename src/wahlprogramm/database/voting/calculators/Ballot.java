@@ -29,6 +29,9 @@ public class Ballot {
     }
 
     public ArrayList<MeekCandidateDataModel> getMeekCandidates(){
-        return getCandidates().stream().map(c->c.convertToMeekCandidate(this.BallotEntries)).collect(Collectors.toCollection(ArrayList::new));
+        return getCandidates()
+                .stream()
+                .map(CandidatesDataModel::convertToMeekCandidate)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

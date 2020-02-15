@@ -10,7 +10,6 @@ import database.DatabaseManager;
 import database.voting.calculators.Ballot;
 import database.voting.calculators.PreferentialVotingFactory;
 import javafx.beans.property.SimpleIntegerProperty;
-import tabs.election.rankingWindow.RankingEntry;
 import tabs.results.ResultsDataModel;
 
 import java.sql.SQLException;
@@ -40,7 +39,7 @@ public class VotingHelper {
         BALLOTS.stream().filter(b->b.getRole().equals(role)).findFirst().get().insertBallot(ballot);
     }
 
-    public ArrayList<ResultsDataModel> calculateResults(int seats) throws SQLException {
+    public ArrayList<ResultsDataModel> calculateResults(int districtConferenceSeats, int districtParliamentSeats) throws SQLException {
         ArrayList<ResultsDataModel> winningCandidates = new ArrayList<>();
 
         for(BallotsOfOneRole ballotsOfOneRole : BALLOTS){
@@ -51,6 +50,19 @@ public class VotingHelper {
                                     )
                     );
 
+            int seats;
+            switch (ballotsOfOneRole.getRole()){
+                case "Bezirkskonferenz":
+                    seats = districtConferenceSeats;
+                    break;
+                case "Bezirksrat":
+                    seats = districtParliamentSeats;
+                    break;
+                default:
+                    seats = 2;
+                    break;
+            }
+
             // Add every male winner:
             winningCandidates
                     .addAll(
@@ -58,21 +70,19 @@ public class VotingHelper {
                                     .calculateResults(
                                             new BallotsOfOneRole(
                                                     ballotsOfOneRole.getRole(),
-                                                    ballotsOfOneRole.getGenderSpecificBallots("Männlich")),
-                                            (int)Math.floor(seats/2d))
+                                                    ballotsOfOneRole.getBallotsWithOnlyMales()),
+                                            (int)Math.floor(((float)seats)/2d))
                     );
 
             // Add every female and diverse winner:
-            var femaleAndDiverseBallots = ballotsOfOneRole.getGenderSpecificBallots("Weiblich");
-            femaleAndDiverseBallots.addAll(ballotsOfOneRole.getGenderSpecificBallots("Sonstige"));
             winningCandidates
                     .addAll(
                             votingSystem
                                     .calculateResults(
                                             new BallotsOfOneRole(
                                                     ballotsOfOneRole.getRole(),
-                                                    femaleAndDiverseBallots),
-                                            (int)Math.ceil(seats/2d))
+                                                    ballotsOfOneRole.getBallotsWithoutMales()),
+                                            (int)Math.ceil(((float)seats)/2d))
                     );
         }
 

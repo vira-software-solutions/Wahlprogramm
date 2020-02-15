@@ -87,26 +87,20 @@ public class Results extends VBox {
     }
 
     private ArrayList<ResultsDataModel> calculateResults() throws SQLException {
-        var results = sektionComboBox
+        final var sektion = sektionComboBox
                 .getSelectionModel()
-                .getSelectedItem()
-                .getVotingHelper()
-                .calculateResults(
-                        sektionComboBox
-                                .getSelectionModel()
-                                .getSelectedItem().getDistrictConferenceSeats()
-                );
+                .getSelectedItem();
 
-        results.addAll(sektionComboBox
+        return sektionComboBox
                 .getSelectionModel()
                 .getSelectedItem()
                 .getVotingHelper()
                 .calculateResults(
-                        sektionComboBox
-                                .getSelectionModel()
-                                .getSelectedItem().getDistrictParliamentSeats()
-                ));
-        return results;
+                        sektion
+                                .getDistrictConferenceSeats(),
+                        sektion
+                                .getDistrictParliamentSeats()
+                );
     }
 
     @FXML

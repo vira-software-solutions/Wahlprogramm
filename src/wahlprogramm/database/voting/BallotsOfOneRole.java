@@ -9,40 +9,59 @@ public class BallotsOfOneRole {
     public final ArrayList<Ballot> Ballots;
     private final String Role;
 
-    public BallotsOfOneRole(String role){
+    public BallotsOfOneRole(String role) {
         this(role, new ArrayList<>());
     }
 
-    public BallotsOfOneRole(String role, ArrayList<Ballot> ballots){
+    public BallotsOfOneRole(String role, ArrayList<Ballot> ballots) {
         Ballots = ballots;
         Role = role;
     }
 
-    public void insertBallot(Ballot ballot){
+    public void insertBallot(Ballot ballot) {
         Ballots.add(ballot);
     }
 
-    public ArrayList<Ballot> getGenderSpecificBallots(String gender){
-        var maleBallots = new ArrayList<Ballot>();
-        for(var ballot:
-                Ballots){
-            maleBallots.add(
-                    new Ballot(
-                            ballot
-                                    .BallotEntries
-                                    .stream()
-                                    .filter(bE->
-                                            bE
-                                                    .DataModel
-                                                    .getGender()
-                                                    .equals(gender)
-                                    )
-                                    .collect(Collectors.toList())
-                    )
-            );
-        }
+    /*
+        Returns ballots with only male entries.
+     */
+    public ArrayList<Ballot> getBallotsWithOnlyMales() {
+        var genderedBallots = new ArrayList<Ballot>();
 
-        return maleBallots;
+        Ballots.forEach(b -> {
+            var filtered = b.BallotEntries
+                    .stream()
+                    .filter(bE ->
+                            bE.DataModel
+                                    .getGender()
+                                    .equals("Männlich")
+                    )
+                    .collect(Collectors.toList());
+            genderedBallots.add(new Ballot(filtered));
+        });
+
+        return genderedBallots;
+    }
+
+    /*
+        Returns ballots without any male entries.
+     */
+    public ArrayList<Ballot> getBallotsWithoutMales() {
+        var genderedBallots = new ArrayList<Ballot>();
+
+        Ballots.forEach(b -> {
+            var filtered = b.BallotEntries
+                    .stream()
+                    .filter(bE ->
+                            !bE.DataModel
+                                    .getGender()
+                                    .equals("Männlich")
+                    )
+                    .collect(Collectors.toList());
+            genderedBallots.add(new Ballot(filtered));
+        });
+
+        return genderedBallots;
     }
 
     public String getRole() {

@@ -7,9 +7,7 @@ package database;
 
 import database.voting.calculators.meek.MeekCandidateDataModel;
 import javafx.beans.property.SimpleStringProperty;
-import tabs.election.rankingWindow.RankingEntry;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class CandidatesDataModel {
@@ -27,17 +25,16 @@ public class CandidatesDataModel {
         this(base.getName(), base.getGender());
     }
 
-    public MeekCandidateDataModel convertToMeekCandidate(ArrayList<RankingEntry> votes){
+    public MeekCandidateDataModel convertToMeekCandidate(){
         return new MeekCandidateDataModel(this);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
         CandidatesDataModel that = (CandidatesDataModel) o;
-        return Objects.equals(Name, that.Name) &&
-                Objects.equals(Gender, that.Gender);
+        return getName().equals(that.getName()) &&
+                getGender().equals(that.getGender());
     }
 
     public String getName() {

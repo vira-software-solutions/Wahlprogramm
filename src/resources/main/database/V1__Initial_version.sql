@@ -9,12 +9,14 @@ CREATE TABLE IF NOT EXISTS "sektion"
 (
 	num int not null
 		constraint sektion_pk
-			primary key
+			primary key,
+	bezR int not null,
+	bezK int not null
 );
-INSERT INTO sektion VALUES(2);
-INSERT INTO sektion VALUES(3);
-INSERT INTO sektion VALUES(4);
-INSERT INTO sektion VALUES(5);
+INSERT INTO sektion VALUES(2, 0, 11);
+INSERT INTO sektion VALUES(3, 6, 22);
+INSERT INTO sektion VALUES(4, 1, 8);
+INSERT INTO sektion VALUES(5, 1, 11);
 
 create table voting_option
 (

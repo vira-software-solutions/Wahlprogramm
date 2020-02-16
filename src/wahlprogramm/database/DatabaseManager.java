@@ -20,31 +20,30 @@ import java.util.List;
 public final class DatabaseManager {
     public static final String DATABASE_LOCATION = "src/resources/wahlprogramm.database";
 
-    public static boolean databaseExists(){
+    public static boolean databaseExists() {
         return new File(DATABASE_LOCATION).exists();
     }
 
     public static void initializeDatabase(User admin) throws SQLException {
         var dbConfig = new FluentConfiguration();
-        dbConfig.dataSource("jdbc:sqlite:"+DATABASE_LOCATION, "", "");
+        dbConfig.dataSource("jdbc:sqlite:" + DATABASE_LOCATION, "", "");
         dbConfig.locations("classpath:main/database/");
         dbConfig.mixed(true);
         Flyway flyway = new Flyway(dbConfig);
         try {
             flyway.migrate();
-        }
-        catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
         insertUser(admin);
     }
 
-    private static Connection Connect() {
+    private static Connection connect() {
         Connection conn;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:"+DATABASE_LOCATION);
+            conn = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_LOCATION);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             conn = null;
@@ -53,13 +52,11 @@ public final class DatabaseManager {
         return conn;
     }
 
-    private static Connection OpenConnection() {
-        Connection conn = Connect();
-
-        return conn;
+    private static Connection openConnection() {
+        return connect();
     }
 
-    private static void CloseConnection(Connection conn) {
+    private static void closeConnection(Connection conn) {
         try {
             conn.close();
         } catch (SQLException e) {
@@ -67,8 +64,8 @@ public final class DatabaseManager {
         }
     }
 
-    public static final void insertUser(User user) throws SQLException {
-        Connection conn = OpenConnection();
+    public static void insertUser(User user) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return;
         }
@@ -78,11 +75,11 @@ public final class DatabaseManager {
         stmt.setString(2, user.getDecryptedPassword());
         stmt.executeUpdate();
 
-        CloseConnection(conn);
+        closeConnection(conn);
     }
 
-    public static final void insertCandidateForRoleForSektion(ObservableList<CandidatesDataModel> candidatesDataModels, String role, Integer sektion) throws SQLException {
-        Connection conn = OpenConnection();
+    public static void insertCandidateForRoleForSektion(ObservableList<CandidatesDataModel> candidatesDataModels, String role, Integer sektion) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return;
         }
@@ -90,7 +87,7 @@ public final class DatabaseManager {
         conn.setAutoCommit(false);
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO role_sektion_candidate (sektion_num, role_name, candidate_name) VALUES(?,?,?)");
         for (CandidatesDataModel candidatesDataModel : candidatesDataModels) {
-            if(!doesCandidateAlreadyExist(candidatesDataModel)){
+            if (!doesCandidateAlreadyExist(candidatesDataModel)) {
                 insertNewCandidate(candidatesDataModel);
             }
 
@@ -101,11 +98,11 @@ public final class DatabaseManager {
         }
 
         conn.commit();
-        CloseConnection(conn);
+        closeConnection(conn);
     }
 
-    public static final void insertNewCandidate(CandidatesDataModel candidatesDataModel) throws SQLException {
-        Connection conn = OpenConnection();
+    public static void insertNewCandidate(CandidatesDataModel candidatesDataModel) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return;
         }
@@ -117,11 +114,11 @@ public final class DatabaseManager {
         stmt.executeUpdate();
         conn.commit();
 
-        CloseConnection(conn);
+        closeConnection(conn);
     }
 
     public static boolean confirmUser(User user) throws SQLException {
-        Connection conn = OpenConnection();
+        Connection conn = openConnection();
         if (conn == null) {
             return false;
         }
@@ -132,13 +129,13 @@ public final class DatabaseManager {
 
         int toRet = stmt.executeQuery().getInt("count");
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return toRet == 1;
     }
 
-    public static final boolean doesCandidateAlreadyExist(CandidatesDataModel candidatesDataModel) throws SQLException {
-        Connection conn = OpenConnection();
+    public static boolean doesCandidateAlreadyExist(CandidatesDataModel candidatesDataModel) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return false;
         }
@@ -150,13 +147,13 @@ public final class DatabaseManager {
 
         boolean toRet = rs.getInt("count") > 0;
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return toRet;
     }
 
-    public static final ObservableList<String> getRoles() throws SQLException {
-        Connection conn = OpenConnection();
+    public static ObservableList<String> getRoles() throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return null;
         }
@@ -169,32 +166,32 @@ public final class DatabaseManager {
             toRet.add(rs.getString("name"));
         }
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final ObservableList<SektionDataModel> getSektionen() throws SQLException {
-        Connection conn = OpenConnection();
+    public static ObservableList<SektionDataModel> getSektionen() throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return null;
         }
 
-        PreparedStatement stmt = conn.prepareStatement("SELECT num AS num FROM sektion;");
+        PreparedStatement stmt = conn.prepareStatement("SELECT sektion.num AS num, sektion.bezR AS bezR, sektion.bezK AS bezK FROM sektion;");
         ResultSet rs = stmt.executeQuery();
 
         List<SektionDataModel> toRet = new ArrayList<>();
         while (rs.next()) {
-            toRet.add(new SektionDataModel(rs.getInt("num")));
+            toRet.add(new SektionDataModel(rs.getInt("num"), rs.getInt("bezR"), rs.getInt("bezK")));
         }
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final ObservableList<CandidatesDataModel> getCandidatesForRole(Integer sektion, String role) throws SQLException {
-        Connection conn = OpenConnection();
+    public static ObservableList<CandidatesDataModel> getCandidatesForRole(Integer sektion, String role) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return null;
         }
@@ -222,13 +219,13 @@ public final class DatabaseManager {
             );
         }
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final ObservableList<String> getGender() throws SQLException {
-        Connection conn = OpenConnection();
+    public static ObservableList<String> getGender() throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return null;
         }
@@ -241,13 +238,13 @@ public final class DatabaseManager {
             toRet.add(rs.getString("gender"));
         }
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return FXCollections.observableArrayList(toRet);
     }
 
-    public static final void dumpCandidatesForRoleOfSektion(Integer sektion, String role) throws SQLException {
-        Connection conn = OpenConnection();
+    public static void dumpCandidatesForRoleOfSektion(Integer sektion, String role) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return;
         }
@@ -259,12 +256,12 @@ public final class DatabaseManager {
         stmt.executeUpdate();
         conn.commit();
 
-        CloseConnection(conn);
+        closeConnection(conn);
         CollectionOfCollections.removeCandidates(sektion, role);
     }
 
     public static void dumpUnusedCandidates() throws SQLException {
-        Connection conn = OpenConnection();
+        Connection conn = openConnection();
         if (conn == null) {
             return;
         }
@@ -274,12 +271,12 @@ public final class DatabaseManager {
         stmt.executeUpdate();
         conn.commit();
 
-        CloseConnection(conn);
+        closeConnection(conn);
         CollectionOfCollections.updateCandidates();
     }
 
     public static List<String> getBlacklistedGendersForRole(String role) throws SQLException {
-        Connection conn = OpenConnection();
+        Connection conn = openConnection();
         if (conn == null) {
             return null;
         }
@@ -293,13 +290,13 @@ public final class DatabaseManager {
             toRet.add(rs.getString("gender"));
         }
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return toRet;
     }
 
-    public static String getVotingOptionFromRole(String role) throws SQLException{
-        Connection conn = OpenConnection();
+    public static String getVotingOptionFromRole(String role) throws SQLException {
+        Connection conn = openConnection();
         if (conn == null) {
             return null;
         }
@@ -310,8 +307,25 @@ public final class DatabaseManager {
 
         String toRet = rs.getString("type");
 
-        CloseConnection(conn);
+        closeConnection(conn);
 
         return toRet;
+    }
+
+    public static void updateSeatInformation(SektionDataModel sektionDataModel) throws SQLException {
+        Connection conn = openConnection();
+        if (sektionDataModel == null || conn == null) {
+            return;
+        }
+
+        PreparedStatement stmt = conn.prepareStatement("UPDATE sektion SET bezR=?, bezK=? WHERE num=?;");
+
+        stmt.setInt(1, sektionDataModel.getBezR());
+        stmt.setInt(2, sektionDataModel.getBezK());
+        stmt.setInt(3, sektionDataModel.getNum());
+
+        stmt.execute();
+
+        closeConnection(conn);
     }
 }

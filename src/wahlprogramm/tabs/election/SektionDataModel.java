@@ -5,12 +5,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class SektionDataModel {
     private SimpleIntegerProperty Num;
-    private VotingHelper VHelper;
-    private int DistrictParliamentSeats;
-    private int DistrictConferenceSeats;
+    private SimpleIntegerProperty BezR;
+    private SimpleIntegerProperty BezK;
 
-    public SektionDataModel(int num) {
+    private VotingHelper VHelper;
+
+    public SektionDataModel(int num, int bezR, int bezK) {
         Num = new SimpleIntegerProperty(num);
+        BezR = new SimpleIntegerProperty(bezR);
+        BezK = new SimpleIntegerProperty(bezK);
         VHelper = new VotingHelper();
     }
 
@@ -35,19 +38,27 @@ public class SektionDataModel {
         return ""+getNum();
     }
 
-    public int getDistrictConferenceSeats() {
-        return DistrictConferenceSeats;
+    public int getBezR() {
+        return BezR.get();
     }
 
-    public void setDistrictConferenceSeats(int districtConferenceSeats) {
-        DistrictConferenceSeats = districtConferenceSeats;
+    public SimpleIntegerProperty bezRProperty() {
+        return BezR;
     }
 
-    public int getDistrictParliamentSeats() {
-        return DistrictParliamentSeats;
+    public void setBezR(int bezR) {
+        this.BezR.set(bezR);
     }
 
-    public void setDistrictParliamentSeats(int districtParliamentSeats) {
-        DistrictParliamentSeats = districtParliamentSeats;
+    public int getBezK() {
+        return BezK.get();
+    }
+
+    public SimpleIntegerProperty bezKProperty() {
+        return BezK;
+    }
+
+    public void setBezK(int bezK) {
+        this.BezK.set(bezK);
     }
 }

@@ -97,9 +97,9 @@ public class Results extends VBox {
                 .getVotingHelper()
                 .calculateResults(
                         sektion
-                                .getDistrictConferenceSeats(),
+                                .getBezK(),
                         sektion
-                                .getDistrictParliamentSeats()
+                                .getBezR()
                 );
     }
 

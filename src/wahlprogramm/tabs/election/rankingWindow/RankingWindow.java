@@ -45,10 +45,10 @@ public class RankingWindow extends VBox implements Initializable {
         });
     }
 
-    private void rotateNodes(final ListView root, final int indexOfDraggingNode,
+    private void rotateNodes(final ListView<RankingEntry> root, final int indexOfDraggingNode,
                              final int indexOfDropTarget) {
         if (indexOfDraggingNode >= 0 && indexOfDropTarget >= 0) {
-            final Node node = (Node)root.getItems().remove(indexOfDraggingNode);
+            final RankingEntry node = root.getItems().remove(indexOfDraggingNode);
             root.getItems().add(indexOfDropTarget, node);
         }
     }
@@ -70,9 +70,7 @@ public class RankingWindow extends VBox implements Initializable {
     }
 
     private void addWithDragging(final ListView<RankingEntry> root, final RankingEntry node) {
-        node.setOnDragDetected(mouseEvent -> {
-            node.startFullDrag();
-        });
+        node.setOnDragDetected(mouseEvent -> node.startFullDrag());
 
         node.setOnMouseDragEntered(mouseDragEvent -> node.setStyle("-fx-background-color: accent_color"));
 

@@ -45,7 +45,7 @@ public class Election extends VBox {
     private ObservableList<RankingWindow> RankingWindows;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         sektionComboBox.setItems(CollectionOfCollections.getSektionDataModels());
 
         this.sektionComboBox.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> {
@@ -65,7 +65,15 @@ public class Election extends VBox {
         }
 
         resetRankingController();
-        counter.textProperty().bind(sektionComboBox.getSelectionModel().getSelectedItem().getVotingHelper().getBallotCountProperty().asString());
+        counter.textProperty()
+                .bind(sektionComboBox
+                        .getSelectionModel()
+                        .getSelectedItem()
+                        .getVotingHelper()
+                        .getBallotCountProperty()
+                        .divide(RankingWindows.size())
+                        .add(1)
+                        .asString());
     }
 
     private void resetRankingController() throws SQLException, IOException {
@@ -77,9 +85,9 @@ public class Election extends VBox {
             HashSet<CandidatesDataModel> rankedCandidateDataModels = new HashSet<>(Objects
                     .requireNonNull(CollectionOfCollections
                             .getCandidatesDatamodel(sektionComboBox
-                                    .getSelectionModel()
-                                    .getSelectedItem()
-                                    .getNum(),
+                                            .getSelectionModel()
+                                            .getSelectedItem()
+                                            .getNum(),
                                     role)));
 
             if (rankedCandidateDataModels.isEmpty()) {
@@ -114,7 +122,7 @@ public class Election extends VBox {
 
     @FXML
     private void onReset() {
-        sektionComboBox.getItems().stream().forEach(s->s.getVotingHelper().reset());
+        sektionComboBox.getItems().forEach(s -> s.getVotingHelper().reset());
         this.resetButton.setDisable(true);
     }
 }

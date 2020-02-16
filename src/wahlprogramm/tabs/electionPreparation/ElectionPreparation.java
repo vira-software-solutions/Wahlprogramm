@@ -25,7 +25,6 @@ import main.CollectionOfCollections;
 import main.MainController;
 import main.PropsManager;
 import seatDefinition.SeatDefinition;
-import seatDefinition.WindowListener;
 import tabs.election.SektionDataModel;
 
 import java.io.IOException;
@@ -87,11 +86,6 @@ public class ElectionPreparation extends VBox {
                 e.printStackTrace();
             }
         });
-
-        SeatDefinition.addOkListener((districtParliamentSeatCount, districtConferenceSeatCount) -> {
-            sektionComboBox.getSelectionModel().getSelectedItem().setDistrictConferenceSeats(districtConferenceSeatCount);
-            sektionComboBox.getSelectionModel().getSelectedItem().setDistrictParliamentSeats(districtParliamentSeatCount);
-        });
     }
 
     private void initTable() {
@@ -151,6 +145,7 @@ public class ElectionPreparation extends VBox {
             var blacklist = DatabaseManager.getBlacklistedGendersForRole(
                     this.funktionComboBox.getSelectionModel().getSelectedItem()
             );
+            assert blacklist != null;
             allGenders.removeAll(blacklist);
 
             gender.setCellFactory(ComboBoxTableCell.forTableColumn(allGenders));
@@ -215,6 +210,11 @@ public class ElectionPreparation extends VBox {
             stage.setResizable(false);
             stage.setScene(scene);
             new JMetro(scene, Style.valueOf(PropsManager.Props.getProperty("app.style").toUpperCase()));
+
+            SeatDefinition controller =
+                    fxmlLoader.getController();
+            controller.initData(sektionComboBox.getSelectionModel().getSelectedItem());
+
             stage.show();
         } catch (IOException e) {
             Logger logger = Logger.getLogger(getClass().getName());

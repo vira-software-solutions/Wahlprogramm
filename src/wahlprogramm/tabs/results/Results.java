@@ -122,7 +122,7 @@ public class Results extends VBox {
                                 ":" +
                                 System.lineSeparator());
 
-                writer.write("Funktion,Name,Geschlecht,Prozent" + System.lineSeparator());
+                writer.write("Funktion,Name,Geschlecht,Punkte von 100" + System.lineSeparator());
                 for (Object result : resultsTable.getItems().toArray()) {
                     ResultsDataModel resultsDataModel = (ResultsDataModel) result;
                     String text = resultsDataModel.getRole() + "," +
